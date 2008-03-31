@@ -1,0 +1,58 @@
+\documentclass[a4paper, halfparskip+, DIV20, 10pt]{scrartcl}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage[round]{natbib}
+\usepackage{mathpazo}
+ 
+\hyphenation{Tech-ni-sche}
+\begin{document}
+\title{\LARGE How to choose the appropriate Object-Oriented framework \\
+  \LARGE Observations made while implementing \texttt{desiRe}}
+\author{%
+  \large Olaf Mersmann$^{\text{1}}$
+  \and \large Heike Trautmann$^{\text{1}}$
+  \and \large Detlef Steuer$^{\text{2}}$
+  \and \large Claus Weihs$^{\text{1}}$
+  \and \large Uwe Ligges$^{\text{1}}$
+}
+\date{}
+\maketitle
+\thispagestyle{empty}
+\footnotetext[1]{Fakultät Statistik, Technische Universität Dortmund}
+\footnotetext[2]{Fakultät WiSo, Helmut-Schmidt Universität Hamburg}
+ 
+\vskip-3em The talk will focus on some of the challenges faced during the development of
+the \texttt{desiRe} package. Desirability functions and desirability indices are powerful
+tools for multicriteria optimization und multicriteria quality control purposes. The
+package desiRe not only provides functions for computing desirability functions of
+Harrington- \citep{harrington1965} and Derringer/Suich-type \citep{derringer1980} but also
+allows the specification of the functions in an interactive way. Density and distribution
+functions of the desirability functions and the desirabi\-lity index are integrated
+including the possibility of random number generation \citep{steuer2005},
+\citep{trautmann2006}. Optimization procedures for the desirability index and a method for
+determining the uncertainty of the optimum influence factor levels \citep{trautmann2004a}
+as wells as a control chart for the desirability index with analysis of out-of
+control-signals are implemented \citep{trautmann2004}. The Desirability Pareto-Concept
+allows focussing on relevant parts of the Pareto-front by integrating
+a-priori-expert-knowledge in the multicriteria optimization process \citep{mehnen2007}.
+ 
+One of the challenges faced when developing a new package is which implementation of
+object orientation to use. The S language and its implementation \textsf{R} provide two
+very different approaches. S3 methods are a straight forward implementation, where method
+dispatch done based on the class of one of the arguments. This is both fast and easy to
+implement. On the other hand, S4 provides a powerful method dispatch system and much nicer
+data encapsulation with pre- and postconditions as well as a certain degree of type
+safety. Some of the aspects we will cover in the talk include ease of implementation, the
+speed of method invocation and how these systems deal with functions as first class
+objects. Especially the last aspect will be dealt with, since function objects are a
+natural way to represent a desirability.
+ 
+The last part of the talk will focus on ways to improve the speed of critical functions by
+rewriting them in \textsf{C(++)}.
+ 
+\bibliography{useR_2008-abstract}{}
+\bibliographystyle{plainnat}
+\end{document}
+ 
+%% (set-fill-column 90)
