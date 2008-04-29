@@ -7,7 +7,7 @@
  
 \hyphenation{Tech-ni-sche}
 \begin{document}
-\title{\LARGE How to choose the appropriate Object-Oriented framework \\
+\title{\LARGE Desirabilitiy functions in multicriteria optimization \\
   \LARGE Observations made while implementing \texttt{desiRe}}
 \author{%
   \large Olaf Mersmann$^{\text{1}}$
@@ -22,34 +22,37 @@
 \footnotetext[1]{Fakultät Statistik, Technische Universität Dortmund}
 \footnotetext[2]{Fakultät WiSo, Helmut-Schmidt Universität Hamburg}
  
-\vskip-3em The talk will focus on some of the challenges faced during the development of
-the \texttt{desiRe} package. Desirability functions and desirability indices are powerful
-tools for multicriteria optimization und multicriteria quality control purposes. The
-package desiRe not only provides functions for computing desirability functions of
-Harrington- \citep{harrington1965} and Derringer/Suich-type \citep{derringer1980} but also
-allows the specification of the functions in an interactive way. Density and distribution
-functions of the desirability functions and the desirabi\-lity index are integrated
-including the possibility of random number generation \citep{steuer2005},
-\citep{trautmann2006}. Optimization procedures for the desirability index and a method for
-determining the uncertainty of the optimum influence factor levels \citep{trautmann2004a}
-as wells as a control chart for the desirability index with analysis of out-of
-control-signals are implemented \citep{trautmann2004}. The Desirability Pareto-Concept
-allows focussing on relevant parts of the Pareto-front by integrating
-a-priori-expert-knowledge in the multicriteria optimization process \citep{mehnen2007}.
- 
-One of the challenges faced when developing a new package is which implementation of
-object orientation to use. The S language and its implementation \textsf{R} provide two
-very different approaches. S3 methods are a straight forward implementation, where method
-dispatch done based on the class of one of the arguments. This is both fast and easy to
-implement. On the other hand, S4 provides a powerful method dispatch system and much nicer
-data encapsulation with pre- and postconditions as well as a certain degree of type
-safety. Some of the aspects we will cover in the talk include ease of implementation, the
-speed of method invocation and how these systems deal with functions as first class
-objects. Especially the last aspect will be dealt with, since function objects are a
-natural way to represent a desirability.
- 
-The last part of the talk will focus on ways to improve the speed of critical functions by
-rewriting them in \textsf{C(++)}.
+\vskip-3em Desirability functions and desirability indices are
+powerful tools for multicriteria optimization und multicriteria
+quality control purposes. The package \texttt{desiRe} not only
+provides functions for computing desirability functions of Harrington-
+\citep{harrington1965} and Derringer/Suich-type \citep{derringer1980}
+but also allows the specification of functions in an interactive
+manner. Density and distribution functions of the desirability
+functions and the desirabi\-lity index are integrated including the
+possibility of random number generation \citep{steuer2005},
+\citep{trautmann2006}. Optimization procedures for the desirability
+index and a method for determining the uncertainty of the optimum
+influence factor levels \citep{trautmann2004a} as wells as a control
+chart for the desirability index with analysis of out-of
+control-signals are implemented \citep{trautmann2004}. The
+Desirability Pareto-Concept allows focussing on relevant parts of the
+Pareto-front by integrating a-priori-expert-knowledge in the
+multicriteria optimization process \citep{mehnen2007}.
+
+We will focus on the implementation of the Desirability Pareto-Concept
+in \textsf{R}. First we will give a short review of the traditional
+optimization strategy using desirability indices. Then, after
+showcasing NSGA-II \citep{dep2002}, we will briefly talk about how
+desirability functions can be integrated into optimization procedures
+that estimate the pareto front. Finally some of the problems faced
+during the development will be discussed. These include interfacing
+\textsf{R} and \textsf{C} code and using functions as first class objects.
+
+%% Kann man das so schreiben? Oder lieber ankündigen und ggf. unter
+%% den Tisch fallen lassen? Es ist ja jetzt doch wieder sehr viel für
+%% 15 min.
+In addition a short overview of the package will be given.
  
 \bibliography{useR_2008-abstract}{}
 \bibliographystyle{plainnat}
