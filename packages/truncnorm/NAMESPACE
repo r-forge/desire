@@ -1,0 +1,7 @@
+useDynLib(truncnorm)
+
+export(dtruncnorm)
+export(ptruncnorm)
+export(qtruncnorm)
+export(rtruncnorm)
+export(etruncnorm)
