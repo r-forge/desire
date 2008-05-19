@@ -15,7 +15,9 @@ dloglognorm(x, mean = 0, sd = 1)
 ploglognorm(q, mean = 0, sd = 1)
 qloglognorm(p, mean = 0, sd = 1)
 rloglognorm(n, mean = 0, sd = 1)
-eloglognorm(mean = 0, sd = 1)
+mloglognorm(mean, sd, moment)
+eloglognorm(mean, sd)
+vloglognorm(mean, sd)
 }
 \arguments{
   \item{x,q}{vector of quantiles.}
@@ -23,6 +25,7 @@ eloglognorm(mean = 0, sd = 1)
   \item{n}{number of observations.}
   \item{mean}{vector of means.}
   \item{sd}{vector of standard deviations.}
+  \item{moment}{vector of moments}
 }
 \details{
   If 'mean' or 'sd' are not specified they assume the default values of
@@ -31,10 +34,14 @@ eloglognorm(mean = 0, sd = 1)
 \value{
   'dloglognorm' gives the density, 'ploglognorm' gives the distribution
   function, 'qloglognorm' gives the quantile function, 'rloglognorm'
-  generates random deviates and 'eloglognorm' gives the expected value
-  of the distirbution.  
+  generates random deviates, 'mloglognorm' returns the rth moment,
+  'eloglognorm' gives the expected value of the distirbution and
+  vloglognorm the variance.
 }
-\references{ FIXME: Erstes auftauchen? }
+\references{
+  B. Holland, M. Ahsanullah (1989): Further Resultson the Distribution
+  of Meinhold and Singpurwalla, The American Statistician 43 (4), p. 216-219
+}
 \author{
   Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},
   Detlef Steuer \email{steuer@hsu-hamburg.de} and

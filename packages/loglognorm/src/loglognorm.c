@@ -115,7 +115,7 @@ SEXP qloglognorm(SEXP args) {
 
 
 typedef struct {
-  double mean, sd;
+  double mean, sd, r;
 } loglognorm_param;
 
 static void loglognorm_intgr(double *x, int n, void *ex) {
@@ -123,26 +123,27 @@ static void loglognorm_intgr(double *x, int n, void *ex) {
   loglognorm_param *lp = (loglognorm_param *)ex;
   const double mean = lp->mean;
   const double sd = lp->sd;
+  const double r = lp->r;
 
   /* Taken from Trautmann (2004) p. 54 */
   for (i = 0; i < n; ++i) {
-    x[i] = exp(-exp(mean + sd * x[i])) * M_1_SQRT_2PI * exp(-0.5 * pow(x[i], 2.0));
+    x[i] = exp(-r*exp(mean + sd * x[i])) * M_1_SQRT_2PI * exp(-0.5 * pow(x[i], 2.0));
   }
 }
 
-SEXP eloglognorm(SEXP args) {
-  R_len_t i, n_mean, n_sd;
-  SEXP s_mean, s_sd, s_ret;
-  double *mean, *sd, *ret, tmp;
+SEXP mloglognorm(SEXP args) {
+  R_len_t i, n_mean, n_sd, n_moment;
+  SEXP s_mean, s_sd, s_moment, s_ret;
+  double *mean, *sd, *moment, *ret, tmp;
   
   UNPACK_REAL_VECTOR(args, s_mean, mean);
   UNPACK_REAL_VECTOR(args, s_sd, sd);
-  
+  UNPACK_REAL_VECTOR(args, s_moment, moment);
   n_mean = length(s_mean);
   n_sd = length(s_sd);
-  
+  n_moment = length(s_moment);
   if (n_mean != n_sd)
-    error("Length of mean and sd differ (%i != %i)", n_mean, n_sd);
+    error("Length of mean, sd and moment differ (%i != %i)", n_mean, n_sd);
 
   ALLOC_REAL_VECTOR(n_mean, s_ret, ret);
 
@@ -162,14 +163,15 @@ SEXP eloglognorm(SEXP args) {
   for (i = 0; i < n_mean; ++i) {
     lp.mean = mean[i];
     lp.sd = sd[i];
+    lp.r = moment[i];
     Rdqagi(loglognorm_intgr, (void *)&lp, &bound, &inf,
 	   &epsabs, &epsrel, 
 	   &result, &abserr, &neval, &ier,
 	   &limit, &lenw, &last, iwork, work);
-    /* FIXME: Possibly check agains lower bound given in Trautmann
-     * (2004):
+    /* FIXME: Possibly check agains lower bound given in
+     * Trautmann (2004):
      *
-     *   E(X) >= exp(-1.0) * Phi(-mean/sd)
+     *   E(X^r) >= exp(-r) * Phi(-mean/sd)
      */
     if (ier >= 1) { /* Failure */
       ret[i] = R_NaN;
@@ -177,7 +179,7 @@ SEXP eloglognorm(SEXP args) {
       ret[i] = result;
     }
   }
-  UNPROTECT(3);
+  UNPROTECT(4); /* s_mean, s_sd, s_moment, s_ret */
   return s_ret;
 }
 

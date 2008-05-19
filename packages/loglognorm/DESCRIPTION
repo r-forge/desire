@@ -1,12 +1,12 @@
 Package: loglognorm
-Version: 0.9.0
-Date: 2008-05-10
+Version: 0.9.2
+Date: 2008-05-19
 Title: Double log normal distribution functions
 Author:
   Heike Trautmann <trautmann@statistik.uni-dortmund.de>
   and Detlef Steuer <detlef.steuer@hsu-hamburg.de>
   and Olaf Mersmann <olafm@statistik.uni-dortmund.de>
-Maintainer: desiRe developers <desire-developers@lists.r-forge.r-project.org>
+Maintainer: Olaf Mersmann <olafm@statistik.uni-dortmund.de>
 Depends: R (>= 2.7.0)
 Description:
 License: GPLv2
