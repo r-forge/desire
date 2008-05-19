@@ -1,5 +1,5 @@
 Package: loglognorm
-Version: 0.9.4
+Version: 0.9.5
 Date: 2008-05-19
 Title: Double log normal distribution functions
 Author:
@@ -9,6 +9,6 @@ Author:
 Maintainer: Olaf Mersmann <olafm@statistik.uni-dortmund.de>
 Depends: R (>= 2.7.0)
 Description:
-License: GPLv2
+License: GPL-2
 URL: http://r-forge.r-project.org/projects/desire
 LazyData: yes
