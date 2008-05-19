@@ -20,15 +20,15 @@ qloglognorm <- function(p, mean=0, sd=1)
 rloglognorm <- function(n, mean=0, sd=1)
   .External("qloglognorm", runif(n), mean=mean, sd=sd, PACKAGE="loglognorm")
 
-mloglognorm <- function(mean, sd, moment)  
+mloglognorm <- function(moment, mean, sd)
   .External("mloglognorm", mean, sd, moment, PACKAGE="loglognorm")
 
 eloglognorm <- function(mean, sd)
   .External("mloglognorm", mean, sd, rep(1, length(mean)), PACKAGE="loglognorm")
 
 vloglognorm <- function(mean, sd) {
-  m1 <- mloglognorm(mean, sd, rep(1, length(mean)))
-  m2 <- mloglognorm(mean, sd, rep(2, length(mean)))
+  m1 <- mloglognorm(rep(1, length(mean)), mean, sd)
+  m2 <- mloglognorm(rep(2, length(mean)), mean, sd)
   return (m2 - m1^2)
 }
 

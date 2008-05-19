@@ -3,7 +3,9 @@
 \alias{ploglognorm}
 \alias{qloglognorm}
 \alias{rloglognorm}
+\alias{mloglognorm}
 \alias{eloglognorm}
+\alias{vloglognorm}
 \title{The Double Log Normal Distribution}
 \description{
   Density, distribution function, quantile function, random generation
@@ -15,7 +17,7 @@ dloglognorm(x, mean = 0, sd = 1)
 ploglognorm(q, mean = 0, sd = 1)
 qloglognorm(p, mean = 0, sd = 1)
 rloglognorm(n, mean = 0, sd = 1)
-mloglognorm(mean, sd, moment)
+mloglognorm(moment, mean, sd)
 eloglognorm(mean, sd)
 vloglognorm(mean, sd)
 }
