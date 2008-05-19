@@ -15,7 +15,8 @@ dtruncnorm(x, a, b, mean = 0, sd = 1)
 ptruncnorm(q, a, b, mean = 0, sd = 1)
 qtruncnorm(p, a, b, mean = 0, sd = 1)
 rtruncnorm(n, a, b, mean = 0, sd = 1)
-etruncnorm(a, b, mean = 0, sd = 1)
+etruncnorm(a, b, mean, sd)
+etruncnorm(a, b, mean, sd)
 }
 \arguments{
   \item{x,q}{vector of quantiles.}
@@ -33,8 +34,8 @@ etruncnorm(a, b, mean = 0, sd = 1)
 \value{
   'dtruncnorm' gives the density, 'ptruncnorm' gives the distribution
   function, 'qtruncnorm' gives the quantile function, 'rtruncnorm'
-  generates random deviates and 'etruncnorm' gives the expected value
-  of the distirbution.  
+  generates random deviates, 'etruncnorm' gives the expected value and
+  'vtruncnorm' the variance of the distirbution.
 }
 \references{ FIXME: Erstes auftauchen? }
 \author{

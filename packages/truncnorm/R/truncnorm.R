@@ -40,7 +40,17 @@ qtruncnorm <- function(p, a, b, mean=0, sd=1) {
 rtruncnorm <- function(n, a, b, mean=0, sd=1)
   .External("rtruncnorm", n, a, b, mean, sd)
 
-etruncnorm <- function(a, b, mean=0, sd=1)
+etruncnorm <- function(a, b, mean, sd)
   .External("etruncnorm", a, b, mean, sd)
 
+vtruncnorm <- function(a, b, mean, sd) {
+  na <- length(a)
+  if (na > 1) {
+    if (length(mean) == 1)
+      mean <- rep(mean, na)
+    if (length(sd) == 1)
+      sd <- rep(sd, na)
+  }
+  .External("etruncnorm", a, b, mean, sd)
+}
 

@@ -51,7 +51,7 @@ SEXP dtruncnorm(SEXP args) {
 
   c2 = sd * pnorm(b, mean, sd, FALSE, FALSE) - pnorm(a, mean, sd, FALSE, FALSE);
   for (i = 0; i < n; ++i) {
-    double t = x[i];
+    const double t = x[i];
     if (a <= t && t <= b) { /* In range: */
       c1 = dnorm(t, mean, sd, FALSE);
       ret[i] = - c1 / c2;
@@ -67,7 +67,7 @@ SEXP dtruncnorm(SEXP args) {
 SEXP ptruncnorm(SEXP args) {
   R_len_t i, n;
   SEXP s_q, s_a, s_b, s_mean, s_sd, s_ret;
-  double *q, a, b, mean, sd, cx, ca, cb, *ret;
+  double *q, a, b, mean, sd, ca, cb, *ret;
   
   UNPACK_REAL_VECTOR(args, s_q, q);
   UNPACK_REAL_VALUE(args, s_a, a);
@@ -87,7 +87,7 @@ SEXP ptruncnorm(SEXP args) {
     } else if (q[i] > b) {
       ret[i] = 1.0;
     } else {
-      cx = pnorm(q[i], mean, sd, FALSE, FALSE);
+      const double cx = pnorm(q[i], mean, sd, FALSE, FALSE);
       ret[i] = (cx - ca) / (cb - ca);
     }
   }
@@ -125,30 +125,69 @@ SEXP rtruncnorm(SEXP args) {
 
 
 SEXP etruncnorm(SEXP args) {
-  R_len_t i, na, nb;
+  R_len_t i, n_a, n_b, n_mean, n_sd;
   SEXP s_a, s_b, s_mean, s_sd, s_ret;
-  double *a, *b, mean, sd, *ret;
+  double *a, *b, *mean, *sd, *ret;
 
   UNPACK_REAL_VECTOR(args, s_a, a);
   UNPACK_REAL_VECTOR(args, s_b, b);
-  UNPACK_REAL_VALUE(args, s_mean, mean);
-  UNPACK_REAL_VALUE(args, s_sd, sd);
+  UNPACK_REAL_VECTOR(args, s_mean, mean);
+  UNPACK_REAL_VECTOR(args, s_sd, sd);
   
-  na = length(s_a);
-  nb = length(s_b);
-  
-  if (na != nb) 
-    error("Length of a and b differ (%i != %i)", na, nb);
+  n_a = length(s_a);
+  n_b = length(s_b);
+  n_mean = length(s_mean);
+  n_sd = length(s_sd);  
+  if (n_a != n_b || n_b != n_mean || n_mean != n_sd) 
+    error("Length of a, b, mean or sd differ.");
 
-  ALLOC_REAL_VECTOR(na, s_ret, ret);
+  ALLOC_REAL_VECTOR(n_a, s_ret, ret);
   
-  for (i = 0; i < na; ++i) {
-    double ca = dnorm(a[i], mean, sd, FALSE);
-    double cb = dnorm(b[i], mean, sd, FALSE);
-    double Ca = pnorm(a[i], mean, sd, FALSE, FALSE);
-    double Cb = pnorm(b[i], mean, sd, FALSE, FALSE);
+  for (i = 0; i < n_a; ++i) {
+    const double ca = dnorm(a[i], mean[i], sd[i], FALSE);
+    const double cb = dnorm(b[i], mean[i], sd[i], FALSE);
+    const double Ca = pnorm(a[i], mean[i], sd[i], FALSE, FALSE);
+    const double Cb = pnorm(b[i], mean[i], sd[i], FALSE, FALSE);
+    
+    ret[i] = mean[i] + sd[i] * ((ca - cb) / (Cb - Ca));
+  } 
+  UNPROTECT(5);
+  return s_ret;
+}
+
 
-    ret[i] = mean + sd * ((ca - cb) / (Cb - Ca));
+SEXP vtruncnorm(SEXP args) {
+  R_len_t i, n_a, n_b, n_mean, n_sd;
+  SEXP s_a, s_b, s_mean, s_sd, s_ret;
+  double *a, *b, *mean, *sd, *ret;
+  
+  UNPACK_REAL_VECTOR(args, s_a, a);
+  UNPACK_REAL_VECTOR(args, s_b, b);
+  UNPACK_REAL_VECTOR(args, s_mean, mean);
+  UNPACK_REAL_VECTOR(args, s_sd, sd);
+  
+  n_a = length(s_a);
+  n_b = length(s_b);
+  n_mean = length(s_mean);
+  n_sd = length(s_sd);
+  if (n_a != n_b || n_b != n_mean || n_mean != n_sd) 
+    error("Length of a, b, mean or sd differ.");
+
+  ALLOC_REAL_VECTOR(n_a, s_ret, ret);
+  
+  for (i = 0; i < n_a; ++i) {
+    const double am = (a[i] - mean[i])/sd[i];
+    const double bm = (b[i] - mean[i])/sd[i];
+    const double ca = dnorm(am, 0.0, 1.0, FALSE);
+    const double cb = dnorm(bm, 0.0, 1.0, FALSE);
+    const double Ca = pnorm(am, 0.0, 1.0, FALSE, FALSE);
+    const double Cb = pnorm(bm, 0.0, 1.0, FALSE, FALSE);
+    const double v  = sd[i] * sd[i];
+    
+    const double d = Cb - Ca;
+    const double m1 = (ca - cb)/d;
+    const double m2 = (am*ca - bm*cb)/d;
+    ret[i] = (1.0 + m2 + m1*m1)*v;
   } 
   UNPROTECT(5);
   return s_ret;
