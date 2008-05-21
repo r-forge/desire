@@ -1,6 +1,6 @@
 Package: loglognorm
-Version: 0.9.5
-Date: 2008-05-19
+Version: 0.9.6
+Date: 2008-05-20
 Title: Double log normal distribution functions
 Author:
   Heike Trautmann <trautmann@statistik.uni-dortmund.de>

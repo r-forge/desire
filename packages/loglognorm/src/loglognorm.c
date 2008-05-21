@@ -12,104 +12,96 @@
 #include <Rinternals.h>
 #include <R_ext/Applic.h>
 
-#define UNPACK_REAL_VECTOR(ARGS, SXP, DBL) \
-  ARGS = CDR(ARGS); \
-  SXP = CAR(ARGS); \
-  PROTECT(SXP = coerceVector(SXP, REALSXP)); \
-  DBL = REAL(SXP);
+#ifndef MAX
+#define MAX(A, B) ((A > B)?(A):(B))
+#endif
 
-#define UNPACK_REAL_VALUE(ARGS, SXP, DBL) \
-  ARGS = CDR(ARGS); \
-  SXP = CAR(ARGS); \
-  PROTECT(SXP = coerceVector(SXP, REALSXP)); \
-  DBL = *REAL(SXP);
+#define UNPACK_REAL_VECTOR(S, D, N)	\
+  double *D = REAL(S);                  \
+  R_len_t N = length(S);
 
-#define UNPACK_INTEGER_VALUE(ARGS, SXP, INT) \
-  ARGS = CDR(ARGS); \
-  SXP = CAR(ARGS); \
-  PROTECT(SXP = coerceVector(SXP, INTSXP)); \
-  INT = *INTEGER(SXP);
-
-#define ALLOC_REAL_VECTOR(SIZE, SXP, DBL) \
+#define ALLOC_REAL_VECTOR(SXP, DBL, SIZE)    \
+  SEXP SXP;				     \
   PROTECT(SXP = allocVector(REALSXP, SIZE)); \
-  DBL = REAL(SXP);
+  double *DBL = REAL(SXP);
 
 
-SEXP dloglognorm(SEXP args) {
+SEXP dloglognorm(SEXP s_x, SEXP s_mean, SEXP s_sd) {
   R_len_t i, n;
-  SEXP s_x, s_mean, s_sd, s_ret;
-  double *x, mean, sd, *ret, c1, c2, c3, c4;
+  UNPACK_REAL_VECTOR(s_x   , x   , n_x);
+  UNPACK_REAL_VECTOR(s_mean, mean, n_mean);
+  UNPACK_REAL_VECTOR(s_sd  , sd  , n_sd);
   
-  UNPACK_REAL_VECTOR(args, s_x, x);
-  UNPACK_REAL_VALUE(args, s_mean, mean);
-  UNPACK_REAL_VALUE(args, s_sd, sd);
-  
-  n = length(s_x);
-  ALLOC_REAL_VECTOR(n, s_ret, ret);
+  n = MAX(MAX(n_x, n_mean), n_sd);
+  ALLOC_REAL_VECTOR(s_ret, ret, n);
 
-  c1 = - M_1_SQRT_2PI / sd;
-  c2 = -1.0/(2.0 * sd * sd);
   for (i = 0; i < n; ++i) {
-    if (0 <= x[i] && x[i] <= 1) {
-      c3 = c1 / (log(x[i]) * x[i]);
-      c4 = c2 * pow(log(-log(x[i])) - mean, 2);
+    const double cx = x[i % n_x];
+    if (0 <= cx && cx <= 1) {
+      const double cmean = mean[i % n_mean];
+      const double csd = sd[i % n_sd];
+
+      const double c1 = -1.0/(2.0 * csd * csd);
+      const double c2 = log(cx);
+      const double c3 = -M_1_SQRT_2PI / (csd * c2 * cx);
+      const double c4 = c1 * pow(log(-c2) - cmean, 2);
       ret[i] = c3 * exp(c4);
     } else {
       ret[i] = 0.0;
     }
   }
-  UNPROTECT(4);
+  UNPROTECT(1); /* s_ret */
   return s_ret;
 }
 
 
-SEXP ploglognorm(SEXP args) {
+SEXP ploglognorm(SEXP s_q, SEXP s_mean, SEXP s_sd) {
   R_len_t i, n;
-  SEXP s_q, s_mean, s_sd, s_ret;
-  double *q, mean, sd, *ret;
+  UNPACK_REAL_VECTOR(s_q   , q   , n_q);
+  UNPACK_REAL_VECTOR(s_mean, mean, n_mean);
+  UNPACK_REAL_VECTOR(s_sd  , sd  , n_sd);
   
-  UNPACK_REAL_VECTOR(args, s_q, q);
-  UNPACK_REAL_VALUE(args, s_mean, mean);
-  UNPACK_REAL_VALUE(args, s_sd, sd);
-  
-  n = length(s_q);
-  ALLOC_REAL_VECTOR(n, s_ret, ret);
+  n = MAX(MAX(n_q, n_mean), n_sd);
+  ALLOC_REAL_VECTOR(s_ret, ret, n);
 
   for (i = 0; i < n; ++i) {
-    if (q[i] < 0.0) {
+    const double cq = q[i % n_q];
+    const double cmean = mean[i % n_mean];
+    const double csd = sd[i % n_sd];
+    if (cq < 0.0) { 
       ret[i] = 0.0;
-    } else if (q[i] > 1.0) {
+    } else if (cq > 1.0) {
       ret[i] = 1.0;
-    } else {
-      /* FIXME: Better use log=TRUE? */
-      ret[i] = 1.0 - pnorm((log(-log(q[i])) - mean)/sd, 0.0, 1.0, FALSE, FALSE);    
+    } else { /* q \in [0, 1] */
+      /* Directly return the upper tail: */  
+      ret[i] = pnorm(log(-log(cq)), cmean, csd, FALSE, FALSE);      
     }
   }
-  UNPROTECT(4);
+  UNPROTECT(1); /* s_ret */
   return s_ret;
 }
 
 
-SEXP qloglognorm(SEXP args) {
+SEXP qloglognorm(SEXP s_p, SEXP s_mean, SEXP s_sd) {
   R_len_t i, n;
-  SEXP s_p, s_mean, s_sd, s_ret;
-  double *p, mean, sd, *ret;
+  UNPACK_REAL_VECTOR(s_p   , p   , n_p);
+  UNPACK_REAL_VECTOR(s_mean, mean, n_mean);
+  UNPACK_REAL_VECTOR(s_sd  , sd  , n_sd);
   
-  UNPACK_REAL_VECTOR(args, s_p, p);
-  UNPACK_REAL_VALUE(args, s_mean, mean);
-  UNPACK_REAL_VALUE(args, s_sd, sd);
-  
-  n = length(s_p);
-  ALLOC_REAL_VECTOR(n, s_ret, ret);
+  n = MAX(MAX(n_p, n_mean), n_sd);
+  ALLOC_REAL_VECTOR(s_ret, ret, n);
   
   for (i = 0; i < n; ++i) {
-    if (0 <= p[i] && p[i] <= 1.0) {
-      ret[i] = exp(-exp(sd * qnorm(1-p[i], 0.0, 1.0, FALSE, FALSE) + mean));
-    } else {
-      ret[i] = R_NaN;
+    const double cp = p[i % n_p];
+    const double cmean = mean[i % n_mean];
+    const double csd = sd[i % n_sd];
+    if (0 <= cp && cp <= 1.0) { /* p \in [0, 1] */
+      ret[i] = exp(-exp(qnorm(1-cp, cmean, csd, TRUE, FALSE)));
+    } else { 
+      ret[i] = 0.0;
     }      
   }
-  UNPROTECT(4);
+  UNPROTECT(1); /* s_ret */
   return s_ret;
 }
 
@@ -131,39 +123,32 @@ static void loglognorm_intgr(double *x, int n, void *ex) {
   }
 }
 
-SEXP mloglognorm(SEXP args) {
-  R_len_t i, n_mean, n_sd, n_moment;
-  SEXP s_mean, s_sd, s_moment, s_ret;
-  double *mean, *sd, *moment, *ret, tmp;
+SEXP mloglognorm(SEXP s_moment, SEXP s_mean, SEXP s_sd) {
+  R_len_t i, n;
+  UNPACK_REAL_VECTOR(s_moment, moment, n_moment);
+  UNPACK_REAL_VECTOR(s_mean  , mean  , n_mean);
+  UNPACK_REAL_VECTOR(s_sd    , sd    , n_sd);
   
-  UNPACK_REAL_VECTOR(args, s_mean, mean);
-  UNPACK_REAL_VECTOR(args, s_sd, sd);
-  UNPACK_REAL_VECTOR(args, s_moment, moment);
-  n_mean = length(s_mean);
-  n_sd = length(s_sd);
-  n_moment = length(s_moment);
-  if (n_mean != n_sd)
-    error("Length of mean, sd and moment differ (%i != %i)", n_mean, n_sd);
-
-  ALLOC_REAL_VECTOR(n_mean, s_ret, ret);
-
-  /* Parameters for Rdqagi() */
+  n = MAX(MAX(n_moment, n_mean), n_sd);
+  ALLOC_REAL_VECTOR(s_ret, ret, n);
+  
+  /* Parameters for Rdqagi: */
   int limit = 100;
   int lenw = 4 * limit;
   int *iwork = (int *) R_alloc(limit, sizeof(int));
   double *work = (double *) R_alloc(lenw,  sizeof(double));
   loglognorm_param lp;
   double bound = 0; /* not used */
-  int inf = 2; /* 2 = -1nf - inf */
-  double epsabs = 0.0000001;
+  int inf = 2; /* 2 = -Inf - inf */
+  double epsabs = 0.00000001;
   double epsrel = epsabs;
   double result, abserr;
   int neval, ier, last;
       
   for (i = 0; i < n_mean; ++i) {
-    lp.mean = mean[i];
-    lp.sd = sd[i];
-    lp.r = moment[i];
+    lp.mean = mean[i % n_mean];
+    lp.sd = sd[i % n_sd];
+    lp.r = moment[i % n_moment];
     Rdqagi(loglognorm_intgr, (void *)&lp, &bound, &inf,
 	   &epsabs, &epsrel, 
 	   &result, &abserr, &neval, &ier,
@@ -179,7 +164,7 @@ SEXP mloglognorm(SEXP args) {
       ret[i] = result;
     }
   }
-  UNPROTECT(4); /* s_mean, s_sd, s_moment, s_ret */
+  UNPROTECT(1); /* s_ret */
   return s_ret;
 }
 

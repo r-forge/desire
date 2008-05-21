@@ -49,4 +49,16 @@ vloglognorm(mean, sd)
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
   Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
 }
+\examples{
+  x <- seq(0, 1, by=0.05)
+  ## Several different shapes of the density:
+  par(mfrow=c(3, 1))
+  curve(dloglognorm(x, -0.2, 0.2), 0, 1, main="DLN(-0.2, 0.2)")
+  curve(dloglognorm(x,  0.2, 1.0), 0, 1, main="DLN(0.2, 2.0)")
+  curve(dloglognorm(x,  0.2, 1.8), 0, 1, main="DLN(0.2, 2.0)")
+
+  ## Check precision:
+  z <- x - pnorm(qnorm(x, .2, 1.0), .2, 1.0)
+  max(z)
+}
 \keyword{distribution}
