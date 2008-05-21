@@ -38,7 +38,7 @@
 SEXP dtruncnorm(SEXP args) {
   R_len_t i, n;
   SEXP s_x, s_a, s_b, s_mean, s_sd, s_ret;
-  double *x, a, b, mean, sd, c1, c2, *ret;
+  double *x, a, b, mean, sd, *ret;
 
   UNPACK_REAL_VECTOR(args, s_x, x);
   UNPACK_REAL_VALUE(args, s_a, a);
@@ -48,13 +48,14 @@ SEXP dtruncnorm(SEXP args) {
 
   n = length(s_x);
   ALLOC_REAL_VECTOR(n, s_ret, ret);
-
-  c2 = sd * pnorm(b, mean, sd, FALSE, FALSE) - pnorm(a, mean, sd, FALSE, FALSE);
+  const double c1 = pnorm((a-mean)/sd, 0.0, 1.0, TRUE, FALSE);
+  const double c2 = pnorm((b-mean)/sd, 0.0, 1.0, TRUE, FALSE);
+  const double c3 = sd * (c2 - c1);
   for (i = 0; i < n; ++i) {
-    const double t = x[i];
-    if (a <= t && t <= b) { /* In range: */
-      c1 = dnorm(t, mean, sd, FALSE);
-      ret[i] = - c1 / c2;
+    const double cx = x[i];
+    if (a <= cx && cx <= b) { /* In range: */
+      const double c4 = dnorm((cx - mean)/sd, 0.0, 1.0, FALSE);
+      ret[i] = c4 / c3;
     } else { /* Truncated: */
       ret[i] = 0.0;
     }
@@ -78,8 +79,8 @@ SEXP ptruncnorm(SEXP args) {
   n = length(s_q);
   ALLOC_REAL_VECTOR(n, s_ret, ret);
 
-  ca = pnorm(a, mean, sd, FALSE, FALSE);
-  cb = pnorm(b, mean, sd, FALSE, FALSE);
+  ca = pnorm(a, mean, sd, TRUE, FALSE);
+  cb = pnorm(b, mean, sd, TRUE, FALSE);
   
   for (i = 0; i < n; ++i) {
     if (q[i] < a) {
@@ -87,7 +88,7 @@ SEXP ptruncnorm(SEXP args) {
     } else if (q[i] > b) {
       ret[i] = 1.0;
     } else {
-      const double cx = pnorm(q[i], mean, sd, FALSE, FALSE);
+      const double cx = pnorm(q[i], mean, sd, TRUE, FALSE);
       ret[i] = (cx - ca) / (cb - ca);
     }
   }
@@ -146,8 +147,8 @@ SEXP etruncnorm(SEXP args) {
   for (i = 0; i < n_a; ++i) {
     const double ca = dnorm(a[i], mean[i], sd[i], FALSE);
     const double cb = dnorm(b[i], mean[i], sd[i], FALSE);
-    const double Ca = pnorm(a[i], mean[i], sd[i], FALSE, FALSE);
-    const double Cb = pnorm(b[i], mean[i], sd[i], FALSE, FALSE);
+    const double Ca = pnorm(a[i], mean[i], sd[i], TRUE, FALSE);
+    const double Cb = pnorm(b[i], mean[i], sd[i], TRUE, FALSE);
     
     ret[i] = mean[i] + sd[i] * ((ca - cb) / (Cb - Ca));
   } 
@@ -180,8 +181,8 @@ SEXP vtruncnorm(SEXP args) {
     const double bm = (b[i] - mean[i])/sd[i];
     const double ca = dnorm(am, 0.0, 1.0, FALSE);
     const double cb = dnorm(bm, 0.0, 1.0, FALSE);
-    const double Ca = pnorm(am, 0.0, 1.0, FALSE, FALSE);
-    const double Cb = pnorm(bm, 0.0, 1.0, FALSE, FALSE);
+    const double Ca = pnorm(am, 0.0, 1.0, TRUE, FALSE);
+    const double Cb = pnorm(bm, 0.0, 1.0, TRUE, FALSE);
     const double v  = sd[i] * sd[i];
     
     const double d = Cb - Ca;
