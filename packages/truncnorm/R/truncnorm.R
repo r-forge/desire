@@ -8,10 +8,10 @@
 ##
 
 dtruncnorm <- function(x, a, b, mean=0, sd=1)
-  .External("dtruncnorm", x, a, b, mean, sd)
+  .Call("dtruncnorm", x, a, b, mean, sd)
 
 ptruncnorm <- function(q, a, b, mean=0, sd=1)
-  .External("ptruncnorm", q, a, b, mean, sd)
+  .Call("ptruncnorm", q, a, b, mean, sd)
 
 qtruncnorm <- function(p, a, b, mean=0, sd=1) {  
   ## Taken out of package 'msm'
@@ -38,19 +38,11 @@ qtruncnorm <- function(p, a, b, mean=0, sd=1) {
 }
 
 rtruncnorm <- function(n, a, b, mean=0, sd=1)
-  .External("rtruncnorm", n, a, b, mean, sd)
+  .Call("rtruncnorm", n, a, b, mean, sd)
 
 etruncnorm <- function(a, b, mean, sd)
-  .External("etruncnorm", a, b, mean, sd)
+  .Call("etruncnorm", a, b, mean, sd)
 
-vtruncnorm <- function(a, b, mean, sd) {
-  na <- length(a)
-  if (na > 1) {
-    if (length(mean) == 1)
-      mean <- rep(mean, na)
-    if (length(sd) == 1)
-      sd <- rep(sd, na)
-  }
-  .External("etruncnorm", a, b, mean, sd)
-}
+vtruncnorm <- function(a, b, mean, sd)
+  .Call("vtruncnorm", a, b, mean, sd)
 
