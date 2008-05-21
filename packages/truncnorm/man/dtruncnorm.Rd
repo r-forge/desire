@@ -1,9 +1,10 @@
-\name{dtruncnorm}
+\name{truncnorm}
 \alias{dtruncnorm}
 \alias{ptruncnorm}
 \alias{qtruncnorm}
 \alias{rtruncnorm}
 \alias{etruncnorm}
+\alias{vtruncnorm}
 \title{The Truncated Normal Distribution}
 \description{
   Density, distribution function, quantile function, random generation
@@ -16,7 +17,7 @@ ptruncnorm(q, a, b, mean = 0, sd = 1)
 qtruncnorm(p, a, b, mean = 0, sd = 1)
 rtruncnorm(n, a, b, mean = 0, sd = 1)
 etruncnorm(a, b, mean, sd)
-etruncnorm(a, b, mean, sd)
+vtruncnorm(a, b, mean, sd)
 }
 \arguments{
   \item{x,q}{vector of quantiles.}
