@@ -21,14 +21,14 @@ rloglognorm <- function(n, mean=0, sd=1)
   .Call("qloglognorm", runif(n), mean=mean, sd=sd, PACKAGE="loglognorm")
 
 mloglognorm <- function(moment, mean, sd)
-  .Call("mloglognorm", mean, sd, moment, PACKAGE="loglognorm")
+  .Call("mloglognorm", moment,  mean, sd, PACKAGE="loglognorm")
 
 eloglognorm <- function(mean, sd)
-  .Call("mloglognorm", mean, sd, rep(1, length(mean)), PACKAGE="loglognorm")
+  .Call("mloglognorm", 1, mean, sd, PACKAGE="loglognorm")
 
 vloglognorm <- function(mean, sd) {
-  m1 <- mloglognorm(rep(1, length(mean)), mean, sd)
-  m2 <- mloglognorm(rep(2, length(mean)), mean, sd)
+  m1 <- mloglognorm(1, mean, sd)
+  m2 <- mloglognorm(2, mean, sd)
   return (m2 - m1^2)
 }
 
