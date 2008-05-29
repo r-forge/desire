@@ -12,8 +12,8 @@ nsga2 <- function(fn, idim, odim, ...,
                   lower.bounds=rep(-Inf, idim),
                   upper.bounds=rep(Inf, idim),
                   popsize=100, generations=100,
-                  cprob=0.5, cdist=5,
-                  mprob=0.9, mdist=10) {
+                  cprob=0.7, cdist=5,
+                  mprob=0.2, mdist=10) {
   ff <- function(x)
     fn(x, ...)
   cf <- function(x)
