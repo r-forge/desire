@@ -95,7 +95,7 @@ qharrington2 <- function(p, LSL, USL, n, mean, sd) {
   f <- function(q) 
     (p - pharrington2(q, LSL, USL, n, mean, sd))^2
   ## FIXME: Ugly search
-  uniroot(f, c(-Inf, Inf))$root
+  optimize(f, c(0, 1))$minimum1
 }
 
 qdesire.harrington2 <- function(p, f, mean, sd) {
