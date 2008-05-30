@@ -96,7 +96,7 @@ S3method(realisticDF, default)
 S3method(realisticDF, desire.function)
 S3method(realisticDF, composite.desire.function)
 
-## geometric_df.R
+## geometric_di.R
 export(geometricDI)
 
 S3method(geometricDI, numeric)
@@ -105,7 +105,7 @@ S3method(geometricDI, array)
 S3method(geometricDI, desire.function)
 S3method(geometricDI, composite.desire.function)
 
-## geometric_df.R
+## minimum_di.R
 export(minimumDI)
 
 S3method(minimumDI, numeric)
@@ -113,3 +113,12 @@ S3method(minimumDI, matrix)
 S3method(minimumDI, array)
 S3method(minimumDI, desire.function)
 S3method(minimumDI, composite.desire.function)
+
+## mean_di.R
+export(meanDI)
+
+S3method(meanDI, numeric)
+S3method(meanDI, matrix)
+S3method(meanDI, array)
+S3method(meanDI, desire.function)
+S3method(meanDI, composite.desire.function)
