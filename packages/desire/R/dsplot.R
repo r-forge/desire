@@ -9,7 +9,7 @@
 
 dsplot <- function(expr, f,
                    from=NULL, to=NULL, n=101,
-                   interest=NULL,
+                   show.zero=TRUE, interest=NULL,
                    main="Desirability Plot", sub=NULL,...) {
   sexpr <- substitute(expr)
   if (is.name(sexpr)) {
@@ -23,7 +23,7 @@ dsplot <- function(expr, f,
 
   ## Evaluate expression:
   x <- seq(from, to, length.out=n)
-  y <- eval(expr, envir = list(x = x), enclos = parent.frame())
+  y <- eval(expr, envir=list(x=x), enclos=parent.frame())
 
   if (length(interest) > 0) {
     xi <- interest
@@ -42,38 +42,41 @@ dsplot <- function(expr, f,
   par(oma=oma)
 
   ## Layout of plots: 1/3 desirability, 2/3 expression
-  layout(matrix(c(2, 1), ncol=2),
-         widths=c(1/3, 2/3),
+  layout(matrix(c(1, 2), ncol=2),
+         widths=c(2/3, 1/3),
          heights=c(1,1))
 
   ## Expression plot
-  par(mar=c(5, 3, 1, 1))
-  plot(x, y, type="l", ...)
-
-  if (length(interest) > 0) {
-    xmin <- par("usr")[1]
-    ymin <- par("usr")[3]
-    segments(xi, ymin, xi, yi, col="red", lty=2)
-    segments(xmin, yi, xi, yi, col="red", lty=2)
-  }
-  ## Desirability plot
-  par(mar=c(5, 2, 1, 0))
-  y <- seq(min(y), max(y), length.out=n)
-  plot(1-f(y), y,
-       xlab=substitute(d(sexpr)), ylab=sexpr,
-       type="l", xaxt="n", yaxt="n", ...)
-  axis(4, labels=FALSE)
-  tck <- axTicks(1)  
-  axis(1, at=tck, labels=1-tck)
-
-  if (length(interest) > 0) {
-    xmax <- par("usr")[2]
-    segments(xmax, yi, 1-di, yi, col="red", lty=2)
-  }
-  
+  par(mar=c(5, 2, 1, 3))
+  plot(x, y, type="l", yaxt="n", ...)
+  axis(4)
   ## Global y axis label
   mtext(sexpr, side=2, line=1)
+  
+  if (show.zero)
+    abline(h=0, col="grey", lty=2)
+  if (length(interest) > 0) {
+    xmax <- par("usr")[2]
+    ymin <- par("usr")[3]
+    segments(xi, ymin, xi, yi, col="red", lty=2)
+    segments(xmax, yi, xi, yi, col="red", lty=2)
+  }
+  ## Desirability plot
+  par(mar=c(5, 0, 1, 2))
+  y <- y[is.finite(y)] ## Remove +/- Inf values (poles)
+  y <- seq(min(y), max(y), length.out=n)  
+  plot(f(y), y,
+       xlab=substitute(d(sexpr)), ylab=sexpr,
+       type="l", yaxt="n", ...)
+  axis(2, labels=FALSE)
 
+  if (show.zero)
+    abline(h=0, col="grey", lty=2)
+  if (length(interest) > 0) {
+    xmin <- par("usr")[1]
+    segments(xmin, yi, di, yi, col="red", lty=2)
+  }
+  
   ## Add main/sub title to plot:
   if (!is.null(main))
     mtext(main, side=3, outer=TRUE)
