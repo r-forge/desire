@@ -1,0 +1,124 @@
+useDynLib(desire)
+
+## Imports:
+importFrom(loglognorm, dloglognorm, ploglognorm, qloglognorm, rloglognorm, eloglognorm, vloglognorm)
+
+## dfun.R
+export(ddesire)
+export(pdesire)
+export(qdesire)
+export(rdesire)
+export(edesire)
+export(vdesire)
+
+S3method(plot, desire.function)
+S3method(plot, realistic.desire.function)
+
+S3method(print, desire.function)
+
+S3method(ddesire, default)
+S3method(pdesire, default)
+S3method(qdesire, default)
+S3method(rdesire, default)
+S3method(edesire, default)
+S3method(vdesire, default)
+
+## harrington1.R:
+export(harrington1)
+export(dharrington1)
+export(pharrington1)
+export(qharrington1)
+export(rharrington1)
+export(eharrington1)
+export(vharrington1)
+
+S3method(print, harrington1)
+
+S3method(ddesire, harrington1)
+S3method(pdesire, harrington1)
+S3method(qdesire, harrington1)
+S3method(edesire, harrington1)
+S3method(vdesire, harrington1)
+
+## harrington2.R
+export(harrington2)
+export(dharrington2)
+export(pharrington2)
+export(qharrington2)
+export(rharrington2)
+
+S3method(print, harrington2)
+S3method(plot, harrington2)
+
+S3method(ddesire, harrington2)
+S3method(pdesire, harrington2)
+S3method(qdesire, harrington2)
+
+## derringer_suich.R
+export(derringerSuich)
+
+S3method(print, dsLTU11)
+S3method(print, dsLTI11)
+
+#### dsLTU11 functions
+S3method(ddesire, dsLTU11)
+S3method(pdesire, dsLTU11)
+S3method(edesire, dsLTU11)
+
+#### dsLTI11 functions
+S3method(ddesire, dsLTI11)
+S3method(pdesire, dsLTI11)
+S3method(edesire, dsLTI11)
+
+#### dsA1 functions
+#S3method(ddesire, dsA1)
+#S3method(pdesire, dsA1)
+#S3method(edesire, dsA1)
+
+## dsplot.R
+export(dsplot)
+
+## compose_df.R
+export(compositeDF)
+
+S3method(print, composite.desire.function)
+
+S3method(compositeDF, call)
+S3method(compositeDF, "function")
+S3method(compositeDF, lm)
+
+## realistic_df.R
+export(realisticDF)
+
+S3method(print, realistic.desire.function)
+
+S3method(realisticDF, default)
+S3method(realisticDF, desire.function)
+S3method(realisticDF, composite.desire.function)
+
+## geometric_di.R
+export(geometricDI)
+
+S3method(geometricDI, numeric)
+S3method(geometricDI, matrix)
+S3method(geometricDI, array)
+S3method(geometricDI, desire.function)
+S3method(geometricDI, composite.desire.function)
+
+## minimum_di.R
+export(minimumDI)
+
+S3method(minimumDI, numeric)
+S3method(minimumDI, matrix)
+S3method(minimumDI, array)
+S3method(minimumDI, desire.function)
+S3method(minimumDI, composite.desire.function)
+
+## mean_di.R
+export(meanDI)
+
+S3method(meanDI, numeric)
+S3method(meanDI, matrix)
+S3method(meanDI, array)
+S3method(meanDI, desire.function)
+S3method(meanDI, composite.desire.function)

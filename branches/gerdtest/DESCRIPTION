@@ -1,0 +1,14 @@
+Package: desire
+Version: 0.9.1
+Date: 2008-05-19
+Title: Desirability functions
+Author:
+  Heike Trautmann <trautmann@statistik.uni-dortmund.de>
+  and Detlef Steuer <detlef.steuer@hsu-hamburg.de>
+  and Olaf Mersmann <olafm@statistik.uni-dortmund.de>
+Maintainer: Olaf Mersmann <olafm@statistik.uni-dortmund.de>
+Depends: R (>= 2.7.0), loglognorm, truncnorm, mco
+Description:
+License: GPLv2
+URL: http://r-forge.r-project.org/projects/desire
+LazyData: yes
