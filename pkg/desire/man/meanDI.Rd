@@ -12,13 +12,15 @@ meanDI(f, ..., weights = 1)
   \item{f,\dots}{\dots}
   \item{weights}{vector of weights. Need not sum to one.}
 }
-\details{
-}
 \author{
   Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
   Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
 }
+\value{
+  A function object implementing which calculates the weighted mean of
+  the desirabilities.
+}
 \seealso{\code{\link{geometricDI}} and \code{\link{minimumDI}}}
-\keyword{optimization}
+\keyword{optimize}
 \keyword{multivariate}
