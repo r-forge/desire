@@ -6,9 +6,11 @@ Author:
   Heike Trautmann <trautmann@statistik.uni-dortmund.de>
   and Detlef Steuer <detlef.steuer@hsu-hamburg.de>
   and Olaf Mersmann <olafm@statistik.uni-dortmund.de>
+  and Maria Eveslage <eveslage@statistik.uni-dortmund.de>
 Maintainer: Olaf Mersmann <olafm@statistik.uni-dortmund.de>
-Depends: R (>= 2.7.0), loglognorm, truncnorm, mco
-Description:
+Depends: R (>= 2.7.0), loglognorm
+Suggests: mco
+Description: Harrington and Derringer-Suich type desirability functions
 License: GPLv2
 URL: http://r-forge.r-project.org/projects/desire
 LazyData: yes
