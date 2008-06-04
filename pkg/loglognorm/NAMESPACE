@@ -1,0 +1,9 @@
+useDynLib(loglognorm)
+
+export(dloglognorm)
+export(ploglognorm)
+export(qloglognorm)
+export(rloglognorm)
+export(mloglognorm)
+export(eloglognorm)
+export(vloglognorm)
