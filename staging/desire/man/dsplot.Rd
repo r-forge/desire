@@ -25,4 +25,10 @@ dsplot(expr, f, from = NULL, to = NULL, n = 101, show.zero = TRUE, interest = NU
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
   Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
 }
+\examples{
+d1 <- harrington2(2, 4, 2)
+dsplot(x*log(x), d1,
+       from=0, to=6, n=507,
+       interest=c(2, 3, 4))
+}
 \keyword{hplot}

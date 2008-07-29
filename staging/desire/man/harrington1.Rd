@@ -63,7 +63,7 @@ h <- harrington1(-2, .1, 2, .9)
 stopifnot(abs(environment(h)$b0 - 0.708167441032245) < 1e-10)
 stopifnot(abs(environment(h)$b1 - 0.7710999431401) < 1e-10)
 stopifnot(abs(h(-2) -.1) < 1e-10)
-1stopifnot(abs(h(2) - .9) < 1e-10)
+stopifnot(abs(h(2) - .9) < 1e-10)
 
 ## Plot of desirability:
 plot(h)
