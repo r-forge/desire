@@ -84,7 +84,6 @@ compositeDF.lm <- function(expr, d, ...) {
   }
   ## Extract vector of names of preditor variables:
   pnames <- attr(terms(expr), "term.labels")
-  print(pnames)
   attr(ev, "composite.desc") <- paste("Linear Model: ", deparse(expr$call))
   class(ev) <- "composite.desire.function"
   attr(ev, "desire.function") <- d
