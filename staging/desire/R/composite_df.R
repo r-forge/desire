@@ -1,5 +1,5 @@
 ##
-## compose_df.R - compose a function and a desriability function
+## compose_df.R - compose a function and a desirability function
 ##
 ## Authors:
 ##  Heike Trautmann  <trautmann@statistik.uni-dortmund.de>
@@ -27,7 +27,7 @@ print.composite.desire.function <- function(x, ...) {
 
 compositeDF <- function(expr, d, ...) {
   if ("composite.desire.function" %in% class(d))
-    stop("Cannot recursivly composition desriabilty function.")
+    stop("Cannot recursivly composition desirabilty function.")
   sexpr <- substitute(expr)
   ## All this because we cannot 'match' the class of an expression...
   if (is.call(sexpr)) { ## Catch expressions:

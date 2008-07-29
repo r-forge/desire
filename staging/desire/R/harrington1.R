@@ -24,7 +24,7 @@ harrington1 <- function(y1, d1, y2, d2) {
   b0 <- b[1];  b1 <- b[2]
   
   class(ev) <- c("harrington1", "desire.function")
-  attr(ev, "desire.type") <- "Two sided Harrington"
+  attr(ev, "desire.type") <- "One sided Harrington"
   attr(ev, "y.range") <- c(y1, y2)
   ## Remove cruft to save space
   rm(b)
@@ -34,7 +34,7 @@ harrington1 <- function(y1, d1, y2, d2) {
 ## print method
 print.harrington1 <- function(x, ...) {
   e <- environment(x)
-  message("    One sided Harrington type desriability")
+  message("    One sided Harrington type desirability")
   message("")  
   pi <- c(e$y1, e$d1, e$y2, e$d2)
   names(pi) <- c("y1", "d1", "y2", "d2")
