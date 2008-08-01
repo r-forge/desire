@@ -76,7 +76,7 @@ compositeDF.lm <- function(expr, d, ...) {
       } else if (is.matrix(x)) {
         ## FIXME: Ugly hack for formulas containing interactions
         ## and/or I() terms. Assumes all 'pure' terms come first.        
-        colnames(x) <- pnames[1:ncols(x)]
+        colnames(x) <- pnames[1:ncol(x)]
         x <- as.data.frame(x)
       } else {
         stop("Cannot convert argument 'x' into a data.frame object.")
