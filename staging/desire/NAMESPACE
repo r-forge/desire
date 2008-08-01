@@ -59,6 +59,7 @@ export(derringerSuich)
 
 S3method(print, dsLTU11)
 S3method(print, dsLTI11)
+S3method(print, derringerSuich)
 
 #### dsLTU11 functions
 S3method(ddesire, dsLTU11)
