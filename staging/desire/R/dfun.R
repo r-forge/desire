@@ -26,7 +26,7 @@ is.composite.desirability <- function(x)
 
 ## Default print method
 print.desire.function <- function(x, ...) 
-  message(attr(x, "desire.type"), "type desirability")
+  message(attr(x, "desire.type"), " type desirability")
 
 ## Default plot method
 plot.desire.function <- function(x, n=600,
