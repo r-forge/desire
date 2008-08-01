@@ -30,8 +30,15 @@ meanDI.array <- function(f, margin=1, ..., weights=1)  {
 
 meanDI.desire.function <- function(f, ..., weights=1) {
   weights <- weights/sum(weights)
-  ev <- function(x)
-    mean(sapply(i, function(k) dfs[[k]](x[k])) * weights)
+  ev <- function(x) {
+    fn <- function(z)
+      mean(sapply(i, function(k) dfs[[k]](z[k])) * weights)
+    if (is.matrix(x)) {
+      apply(x, 1, fn)
+    } else {
+      fn(x)
+    }
+  }
   
   dfs <- list(f, ...)
   if (!all(sapply(dfs, is.desirability)))

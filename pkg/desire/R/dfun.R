@@ -26,7 +26,7 @@ is.composite.desirability <- function(x)
 
 ## Default print method
 print.desire.function <- function(x, ...) 
-  message(attr(x, "desire.type"), "type desirability")
+  message(attr(x, "desire.type"), " type desirability")
 
 ## Default plot method
 plot.desire.function <- function(x, n=600,
@@ -99,14 +99,14 @@ ddesire.default <- function(x, f, mean=0, sd=1)
   stop("Not implemented.")
 
 pdesire.default <- function(q, f, mean=0, sd=1) {
-  warning("Using finit sample estimation.")
+  warning("Using finite sample estimation.")
   s <- rdesire(100000, f, mean, sd)
   r <- sapply(q, function(qq) sum(s < qq)/100000)
   return(r)
 }
 
 qdesire.default <- function(p, f, mean=0, sd=1) {
-  warning("Using finit sample estimation.")
+  warning("Using finite sample estimation.")
   s <- rdesire(100000, f, mean, sd)
   return(quantile(s, p))
 }
@@ -116,7 +116,7 @@ rdesire.default <- function(n, f, mean=0, sd=1) {
 }
 
 edesire.default <- function(f, mean=0, sd=1) { 
-  warning("Using finit sample estimation.")
+  warning("Using finite sample estimation.")
   n <- max(length(mean), length(sd))
   mean <- rep(mean, length.out=n)
   sd <- rep(sd, length.out=n)
@@ -125,7 +125,7 @@ edesire.default <- function(f, mean=0, sd=1) {
 }
 
 vdesire.default <- function(f, mean=0, sd=1) { 
-  warning("Using finit sample estimation.")  
+  warning("Using finite sample estimation.")  
   s <- rdesire(100000, f, mean, sd)  
   return(var(s))
 }

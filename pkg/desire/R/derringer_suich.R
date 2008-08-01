@@ -87,7 +87,7 @@ print.dsLTI11 <- function(x, ...) {
 
 print.derringerSuich <- function(x, ...) {
   e <- environment(x)
-  message("    Generalized Derringer Suich type desriability")
+  message("    Generalized Derringer Suich type desirability")
   message("")
   X <- cbind(format(e$y, width=6),
              format(e$d, width=6),

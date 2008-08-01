@@ -52,11 +52,11 @@ SEXP ds_eval(SEXP s_x, SEXP s_y, SEXP s_d, SEXP s_beta) {
     if (x[i] < ymin || x[i] > ymax) {
       ret[i] = 0.0;
     } else {
-      /* Find j so that y[j] is the smaller than x[i] */
-      for (j=0; y[j] < x[i] ; ++j) {};
+      /* Find j so that y[j] is smaller than x[i] */
+      for (j=0; y[j] < x[i]; ++j) {};
       const double ym = y[j];
       const double yp = y[j-1];
-      if (ym == R_PosInf || yp == R_PosInf) { /* LB Type edge cases */
+      if (ym == R_PosInf || yp == R_NegInf) { /* LB Type edge cases */
 	ret[i] = 1.0;
       } else {
 	const double dm = d[j];

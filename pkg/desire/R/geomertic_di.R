@@ -35,8 +35,15 @@ geometricDI.array <- function(f, margin, ..., weights) {
 
 ## Plain desirability
 geometricDI.desire.function <- function(f, ..., weights) {
-  ev <- function(x) 
-    prod(sapply(i, function(k) dfs[[k]](x[k])^weights[k]))^q
+  ev <- function(x) {
+    fn <- function(z)
+      prod(sapply(i, function(k) dfs[[k]](z[k])^weights[k]))^q
+    if (is.matrix(x)) {
+      apply(x, 1, fn)
+    } else {
+      fn(x)
+    }
+  }
 
   dfs <- list(f, ...)
   if (!all(sapply(dfs, is.desirability)))

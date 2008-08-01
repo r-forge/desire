@@ -55,6 +55,35 @@ vharrington1(y1, d1, y2, d2, mean, sd)
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
   Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
 }
-\seealso{\code{\link{harrington2}} for two sided Harrington type desirabilities}
+\seealso{\code{\link{harrington2}} for two sided Harrington type
+  desirabilities}
+\examples{
+h <- harrington1(-2, .1, 2, .9)
+## Simple checks:
+stopifnot(abs(environment(h)$b0 - 0.708167441032245) < 1e-10)
+stopifnot(abs(environment(h)$b1 - 0.7710999431401) < 1e-10)
+stopifnot(abs(h(-2) -.1) < 1e-10)
+stopifnot(abs(h(2) - .9) < 1e-10)
+
+## Plot of desirability:
+plot(h)
+
+## d/p/q/r examples:
+ddesire(.8, h, 0, 1)
+dharrington1(.8, -2, .1, 2, .9, 0, 1)
+
+pdesire(.8, h, 0, 1)
+pharrington1(.8, -2, .1, 2, .9, 0, 1)
+
+qdesire(.8, h, 0, 1)
+qharrington1(.8, -2, .1, 2, .9, 0, 1)
+
+## Simple convergence plot:
+set.seed(42)
+x <- rdesire(1e6, h, 0, 1)
+est <- cumsum(x)/(1:length(x))
+plot(est, type="l")
+abline(h=edesire(h, 0, 1), lty=2, col="red")
+}
 \keyword{optimize}
 \keyword{multivariate}

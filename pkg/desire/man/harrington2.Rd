@@ -51,6 +51,27 @@ vharrington2(LSL, USL, n, mean, sd)
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
   Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
 }
-\seealso{\code{\link{harrington1}} for one sided Harrington type desirabilities}
+\seealso{\code{\link{harrington1}} for one sided Harrington type
+  desirabilities}
+\examples{
+h <- harrington2(2, 4, 1)
+## Simple checks:
+stopifnot(environment(h)$d == 2)
+stopifnot(environment(h)$s == 6)
+stopifnot(abs(h(2) - h(4)) < 1e-10)
+
+## Plot of desirability:
+plot(h)
+
+## d/p/q/r examples:
+ddesire(.8, h, 0, 1)
+dharrington2(.8, 2, 4, 1, 0, 1)
+
+pdesire(.8, h, 0, 1)
+pharrington2(.8, 2, 4, 1, 0, 1)
+
+qdesire(.2, h, 0, 1)
+qharrington2(.2, 2, 4, 1, 0, 1)
+}
 \keyword{optimize}
 \keyword{multivariate}

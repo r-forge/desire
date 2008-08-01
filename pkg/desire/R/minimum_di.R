@@ -24,8 +24,15 @@ minimumDI.array <- function(f, margin=1, ...)
 
   
 minimumDI.desire.function <- function(f, ...) {
-  ev <- function(x)
-    min(sapply(i, function(k) dfs[[k]](x[k])))
+  ev <- function(x) {
+    fn <- function(z)
+      min(sapply(i, function(k) dfs[[k]](z[k])))
+    if (is.matrix(x)) {
+      apply(x, 1, fn)
+    } else {
+      fn(x)
+    }
+  }
 
   dfs <- list(f, ...)
   if (!all(sapply(dfs, is.desirability)))

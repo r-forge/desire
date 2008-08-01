@@ -29,7 +29,7 @@ harrington2 <- function(LSL, USL, n) {
 ## Print function
 print.harrington2 <- function(x, ...) {
   e <- environment(x)
-  message("    Two sided Harrington type desriability")
+  message("    Two sided Harrington type desirability")
   message("")  
   p <- c(e$LSL, e$USL, e$n)
   names(p) <- c("LSL", "USL", "n")
@@ -95,7 +95,7 @@ qharrington2 <- function(p, LSL, USL, n, mean, sd) {
   f <- function(q) 
     (p - pharrington2(q, LSL, USL, n, mean, sd))^2
   ## FIXME: Ugly search
-  optimize(f, c(0, 1))$minimum1
+  optimize(f, c(0, 1))$minimum
 }
 
 qdesire.harrington2 <- function(p, f, mean, sd) {
