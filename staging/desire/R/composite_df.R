@@ -54,7 +54,7 @@ compositeDF.call <- function(expr, d, ...) {
 
 compositeDF.function <- function(expr, d, ...) {
   ## FIXME: merge ... of ev and ... of cdf.f:
-  ev <- function(x, ...)    
+  ev <- function(x, ...)
       d(expr(x), ...)
   class(ev) <- "composite.desire.function"
   attr(ev, "composite.desc") <- paste("Function: ", deparse(substitute(expr)), "(x)", sep="")
@@ -69,10 +69,14 @@ compositeDF.lm <- function(expr, d, ...) {
     ## Convert non data frame x arguments
     if (!is.data.frame(x)) {
       if (is.vector(x)) {
-        names(x) <- pnames
+        ## FIXME: Ugly hack for formulas containing interactions
+        ## and/or I() terms. Assumes all 'pure' terms come first.        
+        names(x) <- pnames[1:length(x)]
         x <- as.data.frame(as.list(x))
       } else if (is.matrix(x)) {
-        colnames(x) <- pnames
+        ## FIXME: Ugly hack for formulas containing interactions
+        ## and/or I() terms. Assumes all 'pure' terms come first.        
+        colnames(x) <- pnames[1:ncols(x)]
         x <- as.data.frame(x)
       } else {
         stop("Cannot convert argument 'x' into a data.frame object.")
