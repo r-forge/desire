@@ -5,7 +5,8 @@
   TBD
 }
 \usage{
-\method{plot}{desire.function}(x, n = 600, xlim = NULL, ylim = c(0, 1), xlab = "Value", ylab = "Desirability", ...)
+\method{plot}{desire.function}(x, n = 600, xlim = NULL, ylim = c(0, 1),
+              xlab = "Value", ylab = "Desirability", ..., main)
 }
 \arguments{
   \item{x}{desirability function}
@@ -17,6 +18,7 @@
   \item{xlab}{x axes label}
   \item{ylab}{y axes label}
   \item{\dots}{arguments passed to \code{lines}.}
+  \item{main}{main title of plot}
 }
 \author{
   Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},

@@ -69,14 +69,10 @@ compositeDF.lm <- function(expr, d, ...) {
     ## Convert non data frame x arguments
     if (!is.data.frame(x)) {
       if (is.vector(x)) {
-        ## FIXME: Ugly hack for formulas containing interactions
-        ## and/or I() terms. Assumes all 'pure' terms come first.        
-        names(x) <- pnames[1:length(x)]
+        names(x) <- pnames
         x <- as.data.frame(as.list(x))
       } else if (is.matrix(x)) {
-        ## FIXME: Ugly hack for formulas containing interactions
-        ## and/or I() terms. Assumes all 'pure' terms come first.        
-        colnames(x) <- pnames[1:ncol(x)]
+        colnames(x) <- pnames
         x <- as.data.frame(x)
       } else {
         stop("Cannot convert argument 'x' into a data.frame object.")
@@ -87,7 +83,7 @@ compositeDF.lm <- function(expr, d, ...) {
     d(y, sd=sigma, ...)
   }
   ## Extract vector of names of preditor variables:
-  pnames <- attr(terms(expr), "term.labels")
+  pnames <- all.vars(formula(expr)[[3]])
   attr(ev, "composite.desc") <- paste("Linear Model: ", deparse(expr$call))
   class(ev) <- "composite.desire.function"
   attr(ev, "desire.function") <- d
