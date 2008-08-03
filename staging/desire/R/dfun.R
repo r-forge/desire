@@ -32,14 +32,15 @@ print.desire.function <- function(x, ...)
 plot.desire.function <- function(x, n=600,
                                  xlim=NULL, ylim=c(0, 1),
                                  xlab="Value", ylab="Desirability",
-                                 ...) {
+                                 ..., main) {
   if (is.null(xlim))
     xlim <- attr(x, "y.range")
   plot.new()
   plot.window(xlim, ylim)
   box(); axis(1); axis(2)
-  title(main=paste("Type: ", attr(x, "desire.type")),
-        xlab=xlab, ylab=ylab)
+  if (missing(main))
+    main <- paste("Type: ", attr(x, "desire.type"))
+  title(main=main, xlab=xlab, ylab=ylab)
 
   ## Don't use xlim as range. Use 'real' range of x axis.
   xrng <- par("usr")[1:2]
