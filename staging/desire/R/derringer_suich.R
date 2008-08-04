@@ -29,7 +29,12 @@ derringerSuich <- function(y, d, beta) {
     beta <- y[4:5]
     y <- y[1:3]
   }
-    
+
+  ## Possibly cast integers to REAL:
+  y <- as.numeric(y)
+  d <- as.numeric(d)
+  beta <- as.numeric(beta)
+  
   ev <- function(x, ...)
     .Call("ds_eval", x, y, d, beta)
   
