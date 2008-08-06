@@ -1,3 +1,17 @@
+/**
+ * nsga2.c - C implementation of NSGA-II
+ *
+ * Portions of this file are taken from the reference implementation
+ * by K. Deb et. al. 
+ *
+ * See http://www.iitk.ac.in/kangal/codes.shtml for the original code.
+ *
+ * Authors:
+ *  Heike Trautmann  <trautmann@statistik.uni-dortmund.de>
+ *  Detlef Steuer    <detlef.steuer@hsu-hamburg.de>
+ *  Olaf Mersmann    <olafm@statistik.uni-dortmund.de>
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
