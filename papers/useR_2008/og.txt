@@ -1,0 +1,4 @@
+structure(list(par = c(34.580238523131, 52.3095098043461), value = 0.444088055577511, 
+    counts = structure(c(309L, NA), .Names = c("function", "gradient"
+    )), convergence = 10L, message = NULL), .Names = c("par", 
+"value", "counts", "convergence", "message"))

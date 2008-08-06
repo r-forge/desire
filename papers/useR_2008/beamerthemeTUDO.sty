@@ -1,0 +1,82 @@
+%%
+%% beamerthemeSabine.sty - Sabine Rothes Beamer Theme
+%%
+%% Änderungen:
+%%   2006-01-18 : Erste Fassung
+%%
+
+%% Compress headline into a single line of text?
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+
+%% Show numbered TOC instead of bullets?
+\def\beamer@numbertoctrue{}
+\DeclareOptionBeamer{numbertoc}{\beamer@numbertoctrue}
+\newif\ifbeamer@numbertoc
+
+\ProcessOptionsBeamer
+
+\useoutertheme{shadow}
+\useinnertheme{rounded}
+\usecolortheme{dove}
+\usecolortheme{seagull}
+\usefonttheme[onlylarge]{structurebold}
+
+%% TU Dortmund color scheme:
+\xdefinecolor{tu-green}{rgb}{0.518,0.722,0.094} 
+\setbeamercolor{palette primary}   {fg=black, bg=tu-green!20}
+\setbeamercolor{palette secondary} {fg=black, bg=tu-green!40}
+\setbeamercolor{palette tertiary}  {fg=black, bg=tu-green!60}
+\setbeamercolor{palette quaternary}{fg=black, bg=tu-green}
+\setbeamercolor{item projected}    {fg=black, bg=tu-green}
+\setbeamercolor{frametitle}        {fg=black, bg=white}
+\setbeamercolor{block title}       {fg=black, bg=tu-green}
+\setbeamercolor{block body}        {fg=black, bg=tu-green!20}
+\setbeamercolor{normal text}       {fg=black, bg=white}
+
+%% Adjust templates for 'plain' look:
+\setbeamertemplate{headline}{}
+\setbeamertemplate{sidebar left}{}
+\setbeamertemplate{sidebar right}{%
+  \vskip0.2125cm%
+  \llap{\insertlogo\hskip0.1cm}%
+  \vfill%
+  \llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
+  \vskip2pt%
+}
+\setbeamertemplate{frametitle}{%
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+  \begin{beamercolorbox}[sep=0.3cm,left,ignorebg,wd=\the\@tempdima]{frametitle}
+    \usebeamerfont{frametitle}%
+    \vbox{}\vskip-1ex%
+    \if@tempswa\else\csname beamer@fteleft\endcsname\fi%
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1ex%
+    \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{beamercolorbox}%
+}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor~|~\insertshortinstitute
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\setbeamertemplate{blocks}[rounded]
