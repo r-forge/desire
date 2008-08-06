@@ -1,6 +1,6 @@
 Package: mco
-Version: 0.9.1
-Date: 2008-05-17
+Version: 1.0.0
+Date: 2008-08-07
 Title: Multi criteria optimization algorithms
 Author:
   Heike Trautmann <trautmann@statistik.uni-dortmund.de>
