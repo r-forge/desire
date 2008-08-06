@@ -1,6 +1,6 @@
 Package: truncnorm
-Version: 0.9.4
-Date: 2008-05-21
+Version: 1.0.0
+Date: 2008-08-07
 Title: Trunctated Normal Distribution
 Author:
   Heike Trautmann <trautmann@statistik.uni-dortmund.de>
