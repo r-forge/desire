@@ -18,18 +18,21 @@ nsga2(fn, idim, odim, ..., constraints = NULL, cdim = 0, lower.bounds = rep(-Inf
   \item{lower.bounds}{Lower bound of input}
   \item{upper.bounds}{Upper bound of input}
   \item{popsize}{Size of population}
-  \item{generations}{Number of generations to breed}
+  \item{generations}{Number of generations to breed. If a vector, then
+    the result will contain the population at each given generation.}
   \item{cprob}{Crossing probability}
   \item{cdist}{Crossing distribution index}
   \item{mprob}{Mutation probability}
   \item{mdist}{Mutation distribution index}
 }
 \details{
-  TBD
+  
 }
 \value{
-  A list describing the final population with components \code{par},
-  \code{value} and \code{pareto.optimal}.
+  If generation is an integer, a list describing the final population with components \code{par},
+  \code{value} and \code{pareto.optimal}. If generations is a vector, a
+  list is returned. The i-th element of the list contains the population
+  after generations[i] generations.
 }
 \references{}
 \author{
