@@ -16,10 +16,13 @@
 ##  Class   | Type                        | Page
 ## ---------+-----------------------------+------
 ##  dsLTU11 | (l, t, u, 1, 1)             | 61
+##  dsITU11 | (-Inf, t, u, 1, 1)          | c.f. 85
 ##  dsLTI11 | (l, t, Inf, 1, 1)           | 73
 ##  dsTTI11 | (t-delta, t, Inf, 1, 1)     | 75
 ##  dsLTT01 | (l+delta, t, t+delta, 0, 1) | 76
-##  dsgA1   | (y, d, beta==1)             | 85
+##  dsA1    | (y, d, beta==1)              | 85
+##
+## Case ITU is a special case of dsA1
 ##
 
 derringerSuich <- function(y, d, beta) {
@@ -62,6 +65,8 @@ derringerSuich <- function(y, d, beta) {
           class(ev) <- c("dsLTI11", class(ev)) # (l, t, Inf, 1, 1)
         else
           class(ev) <- c("dsTTI11", class(ev)) # (t, t, Inf, 1, 1)
+      } else if (y[1] == -Inf) { ## Hunch
+        class(ev) <- c("dsITU11", class(ev)) # (-Inf, t, u, 1, 1)
       }
     } else if (beta[1] == 0 && beta[2] == 1) { # (?, ?, ?, 0, 1)
       if (y[2] == y[3]) # (l, t, t, 0, 1)
@@ -70,6 +75,7 @@ derringerSuich <- function(y, d, beta) {
   } else if (all(beta == 1)) {
     class(ev) <- c("dsA1", class(ev))
   }
+
   attr(ev, "desire.type") <- "Derringer-Suich"
   attr(ev, "y.range") <- range(y[is.finite(y)])
   ## Remove unnecessary variables, since they will be saved in ev's environment. 
@@ -117,6 +123,12 @@ edesire.dsLTU11 <- function(f, mean=0, sd=1) {
   .Call("edsLTU11", e$y[1], e$y[2], e$y[3], mean, sd)
 }
 
+## Case dsITU11
+edesire.dsITU11 <- function(f, mean=0, sd=1) {
+  e <- environment(f)
+  .Call("edsA1", e$y, c(1, 1, 0), mean, sd);
+}
+  
 ## Case dsLTI11
 ddesire.dsLTI11 <- function(x, f, mean=0, sd=1) {
   e <- environment(f)
@@ -144,7 +156,7 @@ edesire.dsLTI11 <- function(f, mean=0, sd=1) {
 ##   .Call("pdsA1", q, e$y, e$d, mean, sd);
 ## }
 
-## edesire.dsA1 <- function(f, mean=0, sd=1) {
-##   e <- environment(f)
-##   .Call("edsA1", e$y, e$d, mean, sd);
-## }
+edesire.dsA1 <- function(f, mean=0, sd=1) {
+  e <- environment(f)
+  .Call("edsA1", e$y, e$d, mean, sd);
+}
