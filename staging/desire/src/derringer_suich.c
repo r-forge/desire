@@ -339,3 +339,57 @@ SEXP edsLTI11(SEXP s_l, SEXP s_t, SEXP s_mean, SEXP s_sd) {
  * Assumptions:
  *  length(y) == length(d)
  */
+
+SEXP edsA1(SEXP s_y, SEXP s_d, SEXP s_mean, SEXP s_sd) {
+  R_len_t i, k, n;
+  SEXP s_res;
+  /* Unpack arguments */
+  UNPACK_REAL_VECTOR(s_y   , y   , n_y);
+  UNPACK_REAL_VECTOR(s_d   , d   , n_d);
+  UNPACK_REAL_VECTOR(s_mean, mean, n_mean);
+  UNPACK_REAL_VECTOR(s_sd  , sd  , n_sd);
+  /* Maximum argument length == result size */
+  n = MAX(n_mean, n_sd);
+  
+  /* Allocate result vector */
+  PROTECT(s_res = allocVector(REALSXP, n));
+  double *res = REAL(s_res);
+  
+  for (i = 0; i < n; ++i) { /* see Steuer p. 88 */
+    const double cmean = mean[i % n_mean];
+    const double csd = sd[i % n_sd];
+    res[i] = 0.0;
+    for (k = 1; k < n_y; ++k) {
+      const double yk  = y[k];
+      const double ykm = y[k-1];
+
+      const double dk  = d[k];
+      const double dkm = d[k-1];
+
+      const double pyk  = pnorm(yk, cmean, csd, TRUE, FALSE);
+      const double pykm = pnorm(ykm, cmean, csd, TRUE, FALSE);
+      const double pyd  = pyk - pykm;
+      if (dkm == dk) {
+	res[i] += dk * pyd;
+      } else if (pyd != 0){
+	/* We skip parts where pyd is numerically zero because
+	 * they would lead to a division by zero and therefor a 
+	 * result of NaN. Since their weight is almost zero, this
+	 * does not change the result by much...
+	 */
+	const double dyk  = dnorm(yk, cmean, csd, FALSE);
+	const double dykm = dnorm(ykm, cmean, csd, FALSE);
+	const double frac = csd * csd * (dykm - dyk)/pyd;
+	if (dkm > dk) {
+	  const double c1 = (dk - dkm)/(yk - ykm);
+	  res[i] += (dkm + c1 * (cmean + frac - ykm)) * pyd;
+	} else { /* dkm > dk */
+	  const double c1 = (dkm - dk)/(yk - ykm);
+	  res[i] += (dk + c1 * (cmean + frac + yk)) * pyd;
+	} 
+      }
+    }
+  }
+  UNPROTECT(1); /* s_res */
+  return s_res;
+}

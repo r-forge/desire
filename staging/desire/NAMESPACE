@@ -66,15 +66,20 @@ S3method(ddesire, dsLTU11)
 S3method(pdesire, dsLTU11)
 S3method(edesire, dsLTU11)
 
+### dsITU11 functions
+## S3method(ddesire, dsITU11)
+## S3method(pdesire, dsITU11)
+S3method(edesire, dsITU11)
+
 #### dsLTI11 functions
 S3method(ddesire, dsLTI11)
 S3method(pdesire, dsLTI11)
 S3method(edesire, dsLTI11)
 
 #### dsA1 functions
-#S3method(ddesire, dsA1)
-#S3method(pdesire, dsA1)
-#S3method(edesire, dsA1)
+## S3method(ddesire, dsA1)
+## S3method(pdesire, dsA1)
+S3method(edesire, dsA1)
 
 ## dsplot.R
 export(dsplot)
