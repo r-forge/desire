@@ -17,14 +17,13 @@
 \title[useR 2008 / \texttt{desiRe}]{Desirabilitiy functions in \\
   multicriteria optimization \\[1em]
   \large Observations made while implementing \texttt{desiRe}}
-%% Andere Autoren einfügen
 \author[O.~Mersmann]{%
   Olaf~Mersmann
   \and Heike~Trautmann
   \and Detlef~Steuer
   \and Claus~Weihs
   \and Uwe~Ligges}
-\institute[TU Dortmund]{Fakultät für Statistik / TU Dortmund}
+\institute[TU Dortmund]{Fakultät Statistik~|~TU Dortmund}
 \logo{\includegraphics[width=3cm]{tud_logo_rgb}}
 
 \begin{document}
@@ -39,14 +38,14 @@
     \def\arraystretch{1.5}
     \begin{tabular}{ll}
       Influence factors & $X=(X_1,\dotsc, X_n)'$ \\
-      Objectives        & $Y_1,\dotsc, Y_k$  with $Y_i = f_i(X_1,\dotsc, X_n, \epsilon_i)$ \\
+      Objectives        & $Y_1,\dotsc, Y_k$  with $Y_i = f_i(X) + \epsilon_i \quad
+                           \epsilon_i \sim N(0, \sigma_i)$
     \end{tabular}
   \end{block}
   \begin{block}{Goal:}
     \[
     \min_{X_1,\dotsc,X_n} (Y_1,\dotsc,Y_k)
     \]
-    possibly given some restriction functions
   \end{block}
 \end{frame}
 
@@ -101,14 +100,26 @@
 
 \begin{frame}
   \frametitle{Derringer-Suich Desirabilities}
+  \begin{block}{Parameters:}
+    \centerline{$(LSL, T, USL, \beta_1, \beta_2)$}
+  \end{block}
   \begin{columns}[c]
     \column[T]{.5\textwidth}
     \begin{block}{One-Sided}
       \centerline{\includegraphics{d1.pdf}}
+      \begin{tabular}{ll}
+        Black: & $(-\infty, 0, 1, 1, 1)$ \\
+        Blue:  & $(-\infty, 0, 1, 1, \tfrac13)$ \\
+        Red:   & $(-\infty, 0, 1, 1, 2.5)$
+      \end{tabular}
     \end{block}
     \column[T]{.5\textwidth}
     \begin{block}{Two-Sided}
       \centerline{\includegraphics{d2.pdf}}
+      \begin{tabular}{ll}
+        Black: & $(-1, 0, 2, 1, 1)$ \\
+        Blue:  & $(-1, 0, 2, \tfrac13, 2.5)$
+      \end{tabular}
     \end{block}
   \end{columns}
 \end{frame}
@@ -122,14 +133,34 @@
     \[ D_{\min} := \min_{1\le i \le k} d_i \]
   \end{block}
   \begin{block}{Mean DI}
-    \[ D_{m} := \frac1k \sum_{i=1}^k d_i \]
+    \[ D_{m} := \frac1{\sum w_i} \sum_{i=1}^k w_id_i \]
   \end{block}
 
-  Solve MCO by maximizing appropriate DI
+  Solve MCO by maximizing appropriate DI. \\
+  Solve noisy MCO by maximizing expected value of appropriate DI.
 \end{frame}
 
-\begin{frame}
-  \centerline{\bfseries\Large Demonstration}
+\begin{frame}{Demonstration}
+  \begin{columns}[c]
+    \column{.5\textwidth}
+    \centerline{\includegraphics[width=\textwidth]{chocolate.jpg}}
+    \column{.5\textwidth}
+    \begin{block}{Parameters}
+        \begin{tabular}{cll}
+          $\mathop{rt}$    & Processing time  & [min]\\
+          $\mathop{as}$    & Shaft speed      & [rpm] \\
+          $E$              & Energy           & [kWh] \\
+          $d90$            & Particle size    & [$\mu m$] \\
+          $\mathop{Fe}$    & Iron content     & [$\tfrac{mg}{kg}$]\\
+          $\eta_{\text{Ca}}$ & Melting property & [Pa s]\\
+          $\tau_{\text{Ca}}$ & Melting property & [Pa]
+        \end{tabular}
+      \end{block}
+  \end{columns}
+  \vfill
+  C. Alamprese, L. Datei, Q. Semeraro (2007).
+  Optimization of processing parameters of a ball mill refiner for chocolate.
+  \emph{Journal of Food Engineering}, 83(4), 629--636.
 \end{frame}
 
 \begin{frame}
@@ -137,9 +168,11 @@
   \begin{itemize}
     \item Explicit \texttt{d/p/q/r} functions for Harrington and Derringer-Suich desirabilities
     \item Control Chart functions (\emph{in progress})
-    \item Plot functions
+    \item Plot functions 
     \item Generalized Derringer-Suich desirabilities
     \item Linearization of Derringer-Suich desirabilities
+    \item NSGA-II (see package \texttt{mco} on CRAN)
+    \item Desirability Pareto Concept
   \end{itemize}
 \end{frame}
 
@@ -162,5 +195,5 @@
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
-%%% fill-column:90
+%%% fill-column:100
 %%% End:
