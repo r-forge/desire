@@ -39,7 +39,7 @@ minimumDI.desire.function <- function(f, ...) {
     stop("Not all supplied arguments are desirability functions.")
   
   i <- 1:length(dfs)
-  class(ev) <- "desire.index"
+  class(ev) <- c("desire.index", "mimimumDI")
   return(ev)
 }
 

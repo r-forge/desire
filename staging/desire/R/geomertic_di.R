@@ -53,7 +53,7 @@ geometricDI.desire.function <- function(f, ..., weights) {
   if (missing(weights))
     weights <- rep(1, length(dfs))
   q <- 1/sum(weights)
-  class(ev) <- "desire.index"
+  class(ev) <- c("desire.index", "geometricDI")
   return(ev)
 }
 
