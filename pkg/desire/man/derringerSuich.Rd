@@ -26,7 +26,11 @@ G. Derringer and R. Suich (1980),
 Simultaneous optimization of several response variables,
 \emph{Journal of Quality Technology},
 \bold{Vol. 12, No. 4}:214-219.
-D. Steuer (2005), Statistische Eigenschaften der Multikriteriellen Optimierung mittels Wuenschbarkeiten, PhD Thesis, \url{http://hdl.handle.net/2003/20171}.
+
+D. Steuer (2005),
+Statistische Eigenschaften der Multikriteriellen Optimierung mittels Wuenschbarkeiten,
+PhD Thesis,
+\url{http://hdl.handle.net/2003/20171}.
 }
 \author{
   Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},
