@@ -81,3 +81,17 @@ generalizedSpread <- function(x, o) {
     return ((dextr + mean)/(dextr + K*dmean))                 
   }
 }
+
+dominatedHypervolume <- function(front, ref) {
+  ## Possibly infer reference point:
+  if (missing(ref))
+    ref <- apply(front, 2, max)
+  ## Sanity checks:
+  if (!is.matrix(front))
+    stop("Pareto front must be a matrix")
+  if (ncol(front) != length(ref))
+    stop("Reference point and front must have the same dimension.")
+
+  ## Note the transopse. do_hv() needs the front in row major format.
+  .Call("do_hv", t(front), ref)
+}
