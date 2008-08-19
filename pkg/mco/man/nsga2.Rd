@@ -34,7 +34,12 @@ nsga2(fn, idim, odim, ..., constraints = NULL, cdim = 0, lower.bounds = rep(-Inf
   list is returned. The i-th element of the list contains the population
   after generations[i] generations.
 }
-\references{}
+\references{
+  Deb, K., Pratap, A., and Agarwal, S..
+  A Fast and Elitist Multiobjective Genetic Algorithm: NSGA-II.
+  \emph{IEEE Transactions on Evolutionary Computation}, \bold{6 (8)}
+  (2002), 182-197.
+}
 \author{
   Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
