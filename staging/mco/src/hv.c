@@ -177,7 +177,7 @@ static void avl_free_nodes(avl_tree_t *avltree) {
       freeitem(node->item);
     free(node);
   }
-  return avl_clear_tree(avltree);
+  avl_clear_tree(avltree);
 }
 
 static void avl_free_tree(avl_tree_t *avltree) {
@@ -713,6 +713,9 @@ SEXP do_hv(SEXP s_data, SEXP s_ref) {
   /* Unpack arguments */
   UNPACK_REAL_MATRIX(s_data, data, k_data, n_data);
   UNPACK_REAL_VECTOR(s_ref, ref, n_ref);
+
+  if (n_ref != k_data)
+    error("ref and data must be same dimension.");
 
   /* Allocate result */
   PROTECT(s_res = allocVector(REALSXP, 1));
