@@ -721,8 +721,6 @@ SEXP do_hv(SEXP s_data, SEXP s_ref) {
   PROTECT(s_res = allocVector(REALSXP, 1));
   double *res = REAL(s_res);
 
-  Rprintf("%2ix%2i\n", n_data, k_data);
-
   bound = Calloc(k_data, double);
   for (i = 0; i < k_data; i++) 
     bound[i] = -DBL_MAX;
