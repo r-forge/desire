@@ -82,10 +82,14 @@ generalizedSpread <- function(x, o) {
   }
 }
 
-dominatedHypervolume <- function(front, ref) {
+dominatedHypervolume <- function(x, ref) {
+  ## Extract pareto front:
+  front <- paretoFront(x)
+  
   ## Possibly infer reference point:
   if (missing(ref))
     ref <- apply(front, 2, max)
+
   ## Sanity checks:
   if (!is.matrix(front))
     stop("Pareto front must be a matrix")
