@@ -1,0 +1,50 @@
+\documentclass{svmult}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{natbib}
+
+\begin{document}
+
+\title*{Desirabilitiy functions in multicriteria optimization \\
+  Observations made while implementing \texttt{desiRe}}
+
+\author{%
+  Olaf Mersmann\inst{1}
+  \and Heike Trautmann\inst{1}
+  \and Detlef Steuer\inst{2}
+  \and Claus Weihs\inst{1}
+  \and Uwe Ligges\inst{1}}
+
+\institute{%
+  Fakultät Statistik, Technische Universität Dortmund
+  \and Fakultät WiSo, Helmut-Schmidt Universität Hamburg}
+
+\maketitle
+
+\begin{abstract}
+  Desirability functions and desirability indices are powerful tools
+  for multicriteria optimization und multicriteria quality control
+  purposes. The \textsf{R} package \texttt{desiRe} not only provides
+  functions for evaluating desirability functions of the Harrington-
+  \citep{harrington1965} and Derringer/Suich-type
+  \citep{derringer1980} but also allows for their specification 
+  in an interactive manner. Density and distribution functions of the
+  desirability functions and the desirability index are integrated, as
+  well as random number generators \citep{steuer2005},
+  \citep{trautmann2006}. 
+  
+  The talk will illustrate the capabilities of the package by
+  analysing a dataset first presented in \citet{alamprese2007}. Topics
+  covered will include optimizing the desirability as well as
+  its stochastic counterpart, the realistic desirability.
+
+  \keywords{Desirability, R}
+\end{abstract}
+
+\bibliographystyle{plain}
+\bibliography{ifcs09_olafm}
+\end{document}

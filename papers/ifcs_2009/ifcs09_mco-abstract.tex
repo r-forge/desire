@@ -1,0 +1,47 @@
+\documentclass{svmult}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{natbib}
+
+\begin{document}
+
+\title*{Multicriteria optimization in \textsf{R}}
+
+\author{%
+  Olaf Mersmann\inst{1}
+  \and Heike Trautmann\inst{1}
+  \and Claus Weihs\inst{1}}
+
+\institute{Fakultät Statistik, Technische Universität Dortmund}
+
+\maketitle
+
+\begin{abstract}
+  Pareto concept based Multi-objective optimisation procedures have
+  been a big research topic. Some of the notable solvers developed in
+  this field are NSGA-II \citep{dep2002}, SPEA2 \citep{zitzler2001}
+  and the SMS-EMOA \citep{beume2007}. So far their usage has been
+  restricted to \textsf{C}/\textsf{C++} programs and to some extend
+  \textsf{Matlab}. Our \textsf{R} package \texttt{mco} makes these
+  routines, as well as auxiluary functions for the analysis and
+  visualisation of the results obtained, vailable in the statistical
+  programming environment \textsf{R}. Also included in the package is
+  a large collection of test problems, with which one can compare and
+  contrast the strengths and weaknesses of the different algorithms.
+
+  %% Evtl noch ergänzen woran Du im Moment arbeitest, wenn man das bis
+  %% dahin implementiert bekommt.
+  The talk will give a short introduction to \textsf{R} and then
+  illustrate the capabilities of the \textsf{mco} package using
+  several different classes of test problems.  
+
+  \keywords{Muticriteria Optimization, R}
+\end{abstract}
+
+\bibliographystyle{plain}
+\bibliography{ifcs09_olafm}
+\end{document}
