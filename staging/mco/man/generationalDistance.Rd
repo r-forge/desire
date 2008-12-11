@@ -2,6 +2,7 @@
 \alias{generationalDistance}
 \alias{generalizedSpread}
 \alias{dominatedHypervolume}
+\alias{epsilonIndicator}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Quality measures for MCO solutions}
 \description{
@@ -10,6 +11,7 @@
 \usage{
 generationalDistance(x, o)
 generalizedSpread(x, o)
+epsilonIndicator(x, o)
 dominatedHypervolume(x, ref)
 }
 \arguments{
@@ -38,6 +40,11 @@ dominatedHypervolume(x, ref)
   An improved dimension-sweep algorithm for the hypervolume indicator.
   In IEEE Congress on Evolutionary Computation, pages 1157-1163,
   Vancouver, Canada, July 2006.
+
+  Zitzler, E., Thiele, L., Laumanns, M., Fonseca, C., and
+  Grunert da Fonseca, V (2003): Performance Assessment of
+  Multiobjective Optimizers: An Analysis and Review. IEEE
+  Transactions on Evolutionary Computation, 7(2), 117-132.
 }
 \examples{
 sch1 <- function(x) c(x^2, (x-2)^2)

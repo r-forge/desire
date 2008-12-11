@@ -23,6 +23,7 @@ export(normalizeFront)
 export(generationalDistance)
 export(generalizedSpread)
 export(dominatedHypervolume)
+export(epsilonIndicator)
 
 ## functions.R
 export(belegundu)

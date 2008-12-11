@@ -99,3 +99,18 @@ dominatedHypervolume <- function(x, ref) {
   ## Note the transopse. do_hv() needs the front in row major format.
   .Call("do_hv", t(front), ref)
 }
+
+epsilonIndicator <- function(x, o) {
+  x.front <- paretoFront(x)
+  o.front <- paretoFront(o)
+
+  if (!is.matrix(x.front))
+    stop("'x' must be a valid pareto front.")
+  if (!is.matrix(o.front))
+    stop("'o' must be a valid pareto front.")#
+
+  if (any(x.front < 0) || any(o.front < 0))
+    stop("Epsilon Indicator only works for fronts which are strictly positive.")
+  
+  .Call("do_eps_ind", x.front, o.front)
+}
