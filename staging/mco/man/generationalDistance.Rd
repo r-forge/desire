@@ -47,16 +47,16 @@ dominatedHypervolume(x, ref)
   Transactions on Evolutionary Computation, 7(2), 117-132.
 }
 \examples{
-sch1 <- function(x) c(x^2, (x-2)^2)
-
 ## Estimate true front:
-tf <- nsga2(sch1, 1, 2,
-            lower.bounds=0, upper.bounds=1,
-            popsize=1000, generations=20)
-res <- nsga2(sch1, 1, 2,
-             lower.bounds=0, upper.bounds=1,
+tf <- nsga2(fonseca2, 2, 2,
+            lower.bounds=c(-4, -4), upper.bounds=c(4, 4),
+            popsize=1000, generations=100)
+res <- nsga2(fonseca2, 2, 2,
+             lower.bounds=c(-4, -4), upper.bounds=c(4, 4),
              popsize=16, generations=c(2, 4, 6, 8, 10, 20, 50))
 n <- length(res)
+sapply(1:n, function(i) dominatedHypervolume(res[[i]], c(1, 1)))
 sapply(1:n, function(i) generationalDistance(res[[i]], tf))
 sapply(1:n, function(i) generalizedSpread(res[[i]], tf))
+sapply(1:n, function(i) epsilonIndicator(res[[i]], tf))
 }

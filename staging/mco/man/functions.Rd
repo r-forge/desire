@@ -71,4 +71,66 @@ zdt3(x)
   Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
 }
 \examples{
+
+nsga2(belegundu, 2, 2,
+      constraints=belegundu.constr, cdim=2,
+      lower.bounds=c(0, 0), upper.bounds=c(5, 3))
+
+nsga2(binh1, 2, 2,
+      lower.bounds=c(-5, -5), upper.bounds=c(10, 10))
+nsga2(binh2, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(5, 3),
+      constraints=binh2.constr, cdim=2)
+
+nsga2(binh3, 2, 3,
+      lower.bounds=c(10e-6, 10e-6), upper.bounds=c(10e6, 10e6))
+
+nsga2(deb3, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(1, 1),
+      generations=500)
+
+nsga2(fonseca1, 2, 2,
+      lower.bounds=c(-100, -100), upper.bounds=c(100, 100))
+
+nsga2(fonseca2, 2, 2,
+      lower.bounds=c(-4, -4), upper.bounds=c(4, 4))
+
+nsga2(gianna, 1, 2,
+      lower.bounds=5, upper.bounds=10)
+
+nsga2(hanne1, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(10, 10),
+      constraints=hanne1.constr, cdim=1)
+
+nsga2(hanne2, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(10, 10),
+      constraints=hanne2.constr, cdim=1)
+
+nsga2(hanne3, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(10, 10),
+      constraints=hanne3.constr, cdim=1)
+
+nsga2(hanne4, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(10, 10),
+      constraints=hanne4.constr, cdim=1)
+
+nsga2(hanne5, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(10, 10),
+      constraints=hanne5.constr, cdim=1)
+
+nsga2(jimenez, 2, 2,
+      lower.bounds=c(0, 0), upper.bounds=c(100, 100),
+      constraints=jimenez.constr, cdim=4)
+
+nsga2(vnt, 2, 3,
+      lower.bounds=rep(-3, 2), upper.bounds=rep(3, 2))
+
+nsga2(zdt1, 30, 2,
+      lower.bounds=rep(0, 30), upper.bounds=rep(1, 30))
+
+nsga2(zdt2, 30, 2,
+      lower.bounds=rep(0, 30), upper.bounds=rep(1, 30))
+
+nsga2(zdt3, 30, 2,
+      lower.bounds=rep(0, 30), upper.bounds=rep(1, 30))
 }
