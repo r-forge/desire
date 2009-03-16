@@ -1,4 +1,4 @@
-useDynLib(desiRe)
+useDynLib(desire)
 
 ## Imports:
 importFrom(loglognorm, dloglognorm, ploglognorm, qloglognorm, rloglognorm, eloglognorm, vloglognorm)
