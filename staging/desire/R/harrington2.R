@@ -2,9 +2,9 @@
 ## harrington2.R - Two sided Harrington type desiraility functions
 ##
 ## Authors:
-##  Heike Trautmann  <trautmann@statistik.uni-dortmund.de>
+##  Heike Trautmann  <trautmann@statistik.tu-dortmund.de>
 ##  Detlef Steuer    <detlef.steuer@hsu-hamburg.de>
-##  Olaf Mersmann    <olafm@statistik.uni-dortmund.de>
+##  Olaf Mersmann    <olafm@statistik.tu-dortmund.de>
 ##
 
 harrington2 <- function(LSL, USL, n) {

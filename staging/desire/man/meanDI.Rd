@@ -35,9 +35,9 @@ The function can be used for Harrington as well as Derringer and Suich desirabil
 }
 
 \author{
-  Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},
+  Heike Trautmann \email{trautmann@statistik.tu-dortmund.de},
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
-  Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
+  Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
 }
 
 \seealso{\code{\link{harrington1}} and \code{\link{harrington2}} for Harrington type desirability functions;

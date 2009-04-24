@@ -33,9 +33,9 @@ PhD Thesis,
 \url{http://hdl.handle.net/2003/20171}.
 }
 \author{
-  Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},
+  Heike Trautmann \email{trautmann@statistik.tu-dortmund.de},
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
-  Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
+  Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
 }
 \seealso{
   \code{\link{harrington1}} for one sided Harrington type desirabilities and
