@@ -1,0 +1,139 @@
+%D \module
+%D   [      file=t-omepres,
+%D        version=2007.07.07,
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=OME Presentation Environment,
+%D         author=Olaf Mersmann,
+%D           date=\currentdate,
+%D      copyright=Olaf Mersmann]
+
+\usemodule[pre-general]
+\mainlanguage[de]
+\setuppapersize[S6][S6]
+
+%D Color
+\setupcolors[state=start, textcolor=white]
+\definecolor[ShadeTop][s=0]
+\definecolor[ShadeBottom][s=.2]
+\definecolor[HeadColorFg][s=1]
+\definecolor[HeadColorBg][s=.2]
+\definecolor[TitleColorFg][s=1]
+\definecolor[FooterFg][s=.7]
+\definecolor[BlockColor][s=1, t=.2, a=1]
+%D Pagenumbering
+\setuppagenumbering[location=,state=stop]
+
+%D Layout
+\setuplayout[
+  style=smallbodyfont,
+  topspace=10pt,
+  backspace=20pt,
+  header=5pt,
+  footer=20pt,
+  height=428pt, % 450 - 1.5*topspace
+  width=560pt, % 600 - 2*backspace
+  bottom=0pt,
+  margin=0pt,
+]
+
+%D Background
+\startuniqueMPgraphic{LinearShade} 
+  path p ; 
+  p := unitsquare xscaled \overlaywidth yscaled \overlayheight ; 
+  linear_shade(p,8,\MPcolor{ShadeTop},\MPcolor{ShadeBottom}); 
+\stopuniqueMPgraphic 
+\defineoverlay[shade] [\uniqueMPgraphic{LinearShade}] 
+
+\setupbackgrounds[page][background=shade]
+
+%D Font setup:
+\usetypescript[charter]
+\setupbodyfont[charter, 18pt]
+\setupinterlinespace[small]
+
+%D Title page
+\def\StartTitlePage{%
+  \page
+  \start
+    \tfd\setupinterlinespace
+    \setupalign[middle]\TitleColorFg
+    \strut\vfill\vfill\let\\=\vfil}
+\def\StopTitlePage{%
+  \vfill\vfill\stop\page%
+}
+\def\TitlePage#1{\StartTitlePage#1\StopTitlePage}
+
+%D Slides
+\definefont[HeadFontBg][SerifBold sa 1.45]
+\definefont[HeadFontFg][Serif sa 1.35]
+\definefont[Huge][Serif sa 2]
+\definefont[HUGE][Serif sa 5]
+
+\def\startslide{\dosingleempty\dostartslide}
+\def\dostartslide[#1]{%
+  \doifemptyelse{#1}{\strut}{%
+    \hbox{%
+      \llap{\HeadColorFg\blackrule[width=1pt, height=22pt, depth=6pt]\strut}%
+           {\rlap{\HeadFontBg\HeadColorBg #1}}%
+           \hskip6pt{\HeadFontFg\HeadColorFg #1}}}%
+  \vfill}
+\def\stopslide{\vfill\page}
+
+%D Blocks for micro - structure
+\def\startblock{\dodoubleempty\dostartblock}
+\def\dostartblock[#1][#2]{%
+    \doifemptyelse{#2}{%
+      \iffirstargument%
+        \getparameters[ZZ][title=#1,backgroundcolor=BlockColor,width=\v!local]%
+      \else%
+        \getparameters[ZZ][title=,backgroundcolor=BlockColor,width=\v!local]%
+      \fi%
+    }{%
+      \getparameters[ZZ][title=#2,backgroundcolor=BlockColor,#1,width=\v!local]%
+    }%
+    \startframedtext[%
+      frame=on,
+      foreground=color,
+      foregroundcolor=BlockForeground,
+      background=color,
+      backgroundcolor=\ZZbackgroundcolor,
+      offset=8pt, 
+      width=\ZZwidth,
+      corner=08]%
+    \doifnotemptyvalue{ZZtitle}{%
+      \hbox{\leftaligned{\bfa \ZZtitle}}\vskip8pt}}%
+\def\stopblock{\stopframedtext}
+
+%D Customize itemization:
+\setupitemgroup[itemize][1][%
+  symbol=4,
+  before={\vskip5pt}, 
+  inbetween={\vskip5pt},
+  after={\vskip5pt}]
+
+\setupitemgroup[itemize][2][%
+  symbol=5,
+  before={\vskip5pt}, 
+  inbetween={\vskip5pt},
+  after={\vskip5pt}]
+
+%D Local structure:
+\def\emph#1{\color[HeaderColor]{#1}}
+\def\kw#1{{\sc #1}}
+\def\vec#1{{\sl #1}}
+\def\mat#1{{\sl #1}}
+\def\set#1{{\Bbb #1}}
+\def\dist#1{{\cal #1}}
+\def\rv#1{{\ss #1}}
+\def\rV#1{{\bf\ss #1}}
+\def\norm#1{\Vert#1\Vert}
+\def\det{{\rm det}}
+\def\Cov{{\rm Cov}}
+\def\dv#1{\type{#1}}
+\definemathcommand [supp] [nolop] {\mfunction{supp}}
+\definemathcommand [mes]  [nolop] {\mfunction{mes}}
+\definemathcommand [Id]   [nolop] {\Bbb I}
+%%% Local Variables: 
+%%% mode: context
+%%% TeX-master: t
+%%% End: 

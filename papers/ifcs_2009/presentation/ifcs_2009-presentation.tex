@@ -1,0 +1,283 @@
+\usemodule[t-omepres]
+
+%% \input graphics.tex
+
+\usemodule[bib]
+\setuppublications[alternative=apa-de]
+\setupbibtex[database=../bayes.bib, sort=author]
+
+\definecolor[ShadeTop]    [s=1.0]
+\definecolor[ShadeBottom] [s=0.75]
+\definecolor[HeadColorFg] [s=0]
+\definecolor[HeadColorBg] [s=1]
+\definecolor[TitleColorFg][s=0]
+\definecolor[FooterFg]    [s=.2]
+\definecolor[BlockColor]  [s=1, t=.2, a=1]
+\definecolor[BlockForeground][black]
+\setupcolors[state=start, textcolor=black]
+
+\def\abs#1{\left|#1\right|}
+
+\setupfootertexts[{%
+    \rlap{\tfx\FooterFg Olaf Mersmann}
+    \hfill
+    \smash{\lower3pt\hbox{\externalfigure[tud_logo.png][width=4cm]}}
+    \hfill
+    \llap{\tfx\FooterFg IFCS 2009 / {\tt desiRe}}
+}]
+                 
+\setuptables[distance=big]
+
+\starttext
+%\showmakeup
+\TitlePage{%
+  \Huge Desirabilitiy functions in multicriteria optimization \\
+  \vfill
+  \tfx IFCS 2009 \\
+  \tfx Olaf Mersmann,
+  Heike~Trautmann,
+  Detlef~Steuer,
+  Claus~Weihs,
+  Uwe~Ligges
+}
+
+\startslide[Multicriteria Optimization Problem]
+  \startblock[Given:]
+    \def\arraystretch{1.5}
+    \starttable[|l|l|]
+      \NC Influence factors \NC $X=(X_1,\cdots, X_n)'$ \NC\FR
+      \NC Objectives        \NC $Y_1,\cdots, Y_k$  with $Y_i = f_i(X) + \epsilon_i \quad
+                                \epsilon_i \sim N(0, \sigma_i^2)$ \NC\LR
+    \stoptable
+  \stopblock
+  \startblock[Goal:]
+    \startformula
+      \min_{X_1,\cdots,X_n} (Y_1,\cdots,Y_k)
+    \stopformula
+  \stopblock
+\stopslide
+
+\startslide
+  \midaligned{\tfb What does $\min_{X_1,\cdots,X_n} (Y_1,\cdots,Y_k)$ mean?}
+\stopslide
+
+\startslide[Desirabilities]
+  \startblock[Idea]
+    Map objective values to $[0, 1]$. 
+    %% Interpret 1 as {\em desirable} and 0 as {\em undesirable}
+  \stopblock
+  \startblock[Types]
+    \startitemize
+    \item[One-sided] Objective value should be above or below a threshold
+    \item[Two-sided] Objective value should stay in between two thresholds
+    \stopitemize
+   \stopblock
+   \startblock[Applications]
+     \startitemize
+     \item Mostly in chemistry, chemical and mechanical engineering
+     \item Optimization of production- or chemical processes
+     \item Quality Control 
+     \stopitemize
+   \stopblock
+\stopslide
+
+\def\starttwocolumn{\dosingleempty\dostarttwocolumn}
+\def\dostarttwocolumn[#1]{%
+  \bgroup%
+  \doifemptyelse{#1}
+                {\getparameters[TWO][location=top]}%
+                {\getparameters[TWO][location=#1]}%
+  \hbox to \textwidth \bgroup%
+  \startframedtext[none][location=\TWOlocation,offset=0pt, frame=off, width=.485\textwidth]}
+\def\nextcolumn{%
+  \stopframedtext%
+  \hskip.03\textwidth%
+  \startframedtext[none][location=\TWOlocation,offset=0pt, frame=off, width=.485\textwidth]}
+\def\stoptwocolumn{%
+  \stopframedtext%
+  \egroup\egroup}
+
+\startslide[Harrington Desirabilities (1965)]
+  \starttwocolumn
+    \startblock[One-Sided]
+      \midaligned{\externalfigure[h1.pdf]}
+      \starttable[|rMo1|lM|]
+        \NC d(Y_i') \NC = \exp(-\exp(-\abs{Y_i'})) \NC\FR 
+        \NC Y_i'    \NC = b_0 + b_1Y_i \phantom{\frac{A_i}{B}} \NC\LR
+      \stoptable
+      Parameters: $b_0$, $b_1$
+    \stopblock
+    \nextcolumn
+    \startblock[Two-Sided]
+      \midaligned{\externalfigure[h2.pdf]}
+      \starttable[|rMo1|lM|]
+        \NC d(Y_i') \NC = \exp(-\abs{Y_i'}^{n}) \NC\FR
+        \NC Y_i'    \NC = \frac{2Y_i - (USL + LSL)}{USL - LSL} \NC\LR
+      \stoptable
+      Parameters: $LSL$, $USL$, $n$
+    \stopblock
+  \stoptwocolumn
+\stopslide
+
+\startslide[Derringer-Suich Desirabilities (1980)]
+  \startblock
+    {\bf Parameters:} $(LSL, T, USL, \beta_1, \beta_2)$
+  \stopblock
+  \starttwocolumn
+    \startblock[One-Sided]
+       \midaligned{\externalfigure[d1.pdf]}
+       \starttable[|l|l|]
+         \NC Black: \NC $(-\infty, 0, 1, 1, 1)$ \NC\AR
+         \NC Blue:  \NC $(-\infty, 0, 1, 1, \frac13)$ \NC\AR
+         \NC Red:   \NC $(-\infty, 0, 1, 1, 2.5)$ \NC\AR
+       \stoptable
+    \stopblock
+    \nextcolumn
+    \startblock[Two-Sided]
+       \midaligned{\externalfigure[d2.pdf]}
+       \starttable[|l|l|]
+         \NC Black: \NC $(-1, 0, 2, 1, 1)$ \NC\AR
+         \NC Blue:  \NC $(-1, 0, 2, \frac13, 2.5)$ \NC\AR
+       \stoptable
+    \stopblock
+  \stoptwocolumn
+\stopslide
+
+\startslide  
+  \midaligned{\tfb How do we combine desirabilities?}
+\stopslide
+\startslide[Desirability Index (DI)]
+  \startblock[Possible Choices]
+    \starttable[|lB|rMo1|cMo1|lM|]
+      \NC Geometric DI \NC D_g      \NC := \NC (\prod_{i=1}^k d_i^{w_i})^{1/\sum w_i} \NC\AR
+      \NC Minimum DI   \NC D_{\min} \NC := \NC \min_{1\le i \le k} d_i \NC\AR
+      \NC Mean DI      \NC D_{m}    \NC := \NC \frac1{\sum w_i} \sum_{i=1}^k w_i d_i \NC\AR
+    \stoptable
+  \stopblock
+  Solve MCO by maximizing appropriate DI. \crlf
+  Solve noisy MCO by maximizing expected value of appropriate DI.
+\stopslide
+
+\startslide[Comparison with Pareto-Optimization approaches]
+  \startblock[Pros]
+    \startitemize
+    \item Integrate expert knowledge
+    \item Easy interpretation ('goodness-of-fit')
+    \item Easily adapt to more than simple minimization
+    \stopitemize
+  \stopblock
+  \startblock[Cons]
+    \startitemize
+    \item Limited exploration of solution space
+    \item Biased due to (miss)-specified expectations
+    \item Can lead to ill-conditioned optimization problems
+    \stopitemize
+  \stopblock
+\stopslide
+
+\startslide[Example]
+  \vfill
+  \midaligned{\externalfigure[chocolate.png][width=8cm]}
+  \vfill
+  \midaligned{\tfb Make better chocolate!}
+  \vfill
+  {\tfx C. Alamprese, L. Datei, Q. Semeraro (2007).
+  Optimization of processing parameters of a ball mill refiner for chocolate.
+  {\em Journal of Food Engineering}, 83(4), 629--636.}
+\stopslide
+
+\startslide
+  \startblock[Parameters]
+    \starttable[|c|l|l|]
+      \NC $\mathop{rt}$    \NC Processing time  \NC [min] \NC\AR
+      \NC $\mathop{as}$    \NC Shaft speed      \NC [rpm] \NC\AR
+    \stoptable
+  \stopblock
+  \startblock[Quality measures]
+    \starttable[|c|l|l|]
+      \NC $E$              \NC Energy           \NC [kWh] \NC\AR
+      \NC $d90$            \NC Particle size    \NC [$\mu m$] \NC\AR
+      \NC $\mathop{Fe}$    \NC Iron content     \NC [$\frac{mg}{kg}$] \NC\AR
+      \NC $\eta_{\text{Ca}}$ \NC Melting property \NC [Pa] \NC\AR
+      \NC $\tau_{\text{Ca}}$ \NC Melting property \NC [Pa] \NC\AR
+    \stoptable
+  \stopblock  
+\stopslide
+
+\startslide[Goal]
+  \vfill
+  \midaligned{\tfb Minimze Runtime ($\mathop{rt}$)}
+  \vfill
+  \midaligned{\tfb Keep quality parameters in spec}
+  \vfill
+\stopslide
+
+\definedescription[defitem][
+  headstyle=bold,style=normal,align=left,location=hanging,
+  width=broad,margin=1cm]
+
+\startslide
+  \startblock[Input]
+    \startitemize
+    \item Experimental Design with 13 runs
+    \item Linear model for each quality measure
+    \item Derringer-Suich desirabilities for each quality measure    
+    \stopitemize    
+  \stopblock
+  \startblock[Methodology]
+    \defitem{Original analysis} Idealistic desirabilities \par
+    \defitem{Our analysis} Realistic desirabilities \par
+  \stopblock
+\stopslide
+
+\startslide
+  \midaligned{\externalfigure[desfn.pdf]}
+\stopslide
+
+ \startslide[Results]
+   \starttable[|l|r|r|r|r|]
+     \HL
+     \NC  \NC $rt$ \NC $as$ \NC idealistic $DI$ \NC realistic $DI$ \NC\AR
+     \HL
+     \NC Idealisti solution \NC 38.38 \NC 57.53 \NC 0.50 \NC 0.38 \NC\AR
+     \NC Realistic solution \NC 34.60 \NC 52.50 \NC 0    \NC 0.44 \NC\AR
+     \HL
+   \stoptable
+ \stopslide
+
+\startslide
+  \midaligned{\externalfigure[choco1.pdf]}
+\stopslide
+
+\startslide
+  \midaligned{\externalfigure[choco2.pdf]}
+\stopslide
+
+\startslide[Things not mentioned:]
+  \startitemize
+  \item Explicit {\tt d/p/q/r} functions for Harrington and Derringer-Suich desirabilities
+  \item Control Chart functions ({\em in progress})
+  \item Plot functions 
+  \item Generalized Derringer-Suich desirabilities
+  \item Linearization of Derringer-Suich desirabilities
+  \item Combination of desirabilities and EMOA (see package {\tt mco} on CRAN)
+  \item Desirability Pareto Concept
+  \stopitemize
+\stopslide
+
+\startslide[Where to get it]
+  \startalignment[center]
+    {\tta http://r-forge.r-project.org/projects/desire/}
+    \vskip2em
+    or
+    \vskip2em
+    {\tfb CRAN}    
+  \stopalignment
+\stopslide
+\stoptext
+
+%%% Local Variables:
+%%% mode: context
+%%% TeX-master: t
+%%% fill-column:100
+%%% End:
