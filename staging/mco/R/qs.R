@@ -21,11 +21,11 @@ normalizeFront <- function(front, minval, maxval) {
 
 ## Squared distance
 distance2 <- function(x, y)
-  (x - y) %*% (x - y)
+  crossprod((x - y))
 
 ## Squared distance to front
 distanceToFront2 <- function(x, front)
-  min(sapply(1:nrow(front), function(i) { z <- (x - front[i,]); z %*% z }))
+  min(sapply(1:nrow(front), function(i) { crossprod(x - front[i,]) }))
 
 generationalDistance <- function(x, o) {
   front <- paretoFront(x)

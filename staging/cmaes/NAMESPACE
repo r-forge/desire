@@ -1,0 +1,4 @@
+## cma_es.R
+export(cma.es)
+
+export(genShiftedRosenbrock)
