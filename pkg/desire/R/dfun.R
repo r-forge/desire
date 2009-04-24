@@ -2,9 +2,9 @@
 ## dfun.R - general desirability function utilities
 ##
 ## Authors:
-##  Heike Trautmann  <trautmann@statistik.uni-dortmund.de>
+##  Heike Trautmann  <trautmann@statistik.tu-dortmund.de>
 ##  Detlef Steuer    <detlef.steuer@hsu-hamburg.de>
-##  Olaf Mersmann    <olafm@statistik.uni-dortmund.de>
+##  Olaf Mersmann    <olafm@statistik.tu-dortmund.de>
 ##
 
 ##

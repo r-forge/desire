@@ -21,9 +21,9 @@ dsplot(expr, f, from = NULL, to = NULL, n = 101, show.zero = TRUE, interest = NU
 }
 \references{}
 \author{
-  Heike Trautmann \email{trautmann@statistik.uni-dortmund.de},
+  Heike Trautmann \email{trautmann@statistik.tu-dortmund.de},
   Detlef Steuer \email{steuer@hsu-hamburg.de} and
-  Olaf Mersmann \email{olafm@statistik.uni-dortmund.de}
+  Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
 }
 \examples{
 d1 <- harrington2(2, 4, 2)

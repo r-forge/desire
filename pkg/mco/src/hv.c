@@ -433,15 +433,15 @@ static int compare_node( const void *p1, const void* p2) {
   const double x1 = *((*(const dlnode_t **)p1)->x);
   const double x2 = *((*(const dlnode_t **)p2)->x);
 
-  if ( x1 == x2 )
+  if (x1 == x2)
     return 0;
   else
     return ( x1 < x2 ) ? -1 : 1;
 }
 
 static int compare_tree_asc( const void *p1, const void *p2) {
-  const double x1= *((const double *)p1+1);
-  const double x2= *((const double *)p2+1);
+  const double x1 = *((const double *)p1+1);
+  const double x2 = *((const double *)p2+1);
 
   if (x1 != x2)
     return (x1 > x2) ? -1 : 1;
@@ -457,238 +457,218 @@ static dlnode_t * setup_cdllist(double *data, int d, int n) {
   dlnode_t **scratch;
   int i, j;
 
-  head  = malloc ((n+1) * sizeof(dlnode_t));
+  head = malloc ((n+1) * sizeof(dlnode_t));
 
   head->x = data;
   head->ignore = 0;  /* should never get used */
-  head->next = malloc( d * (n+1) * sizeof(dlnode_t*));
-  head->prev = malloc( d * (n+1) * sizeof(dlnode_t*));
-  head->tnode = malloc( sizeof(avl_node_t));
-
-  head->area = malloc(d * (n+1) * sizeof(double));
-  head->vol = malloc(d * (n+1) * sizeof(double));
+  head->next   = malloc(d * (n+1) * sizeof(dlnode_t*));
+  head->prev   = malloc(d * (n+1) * sizeof(dlnode_t*));
+  head->tnode  = malloc(sizeof(avl_node_t));
+  head->area   = malloc(d * (n+1) * sizeof(double));
+  head->vol    = malloc(d * (n+1) * sizeof(double));
 
   for (i = 1; i <= n; i++) {
-    head[i].x = head[i-1].x + d ;/* this will be fixed a few lines below... */
-    head[i].ignore = 0;
-    head[i].next = head[i-1].next + d;
-    head[i].prev = head[i-1].prev + d;
-    head[i].tnode = malloc(sizeof(avl_node_t));
-    head[i].area = head[i-1].area + d;
-    head[i].vol = head[i-1].vol + d;
+      head[i].x = head[i-1].x + d ;/* this will be fixed a few lines below... */
+      head[i].ignore = 0;
+      head[i].next = head[i-1].next + d;
+      head[i].prev = head[i-1].prev + d;
+      head[i].tnode = malloc(sizeof(avl_node_t));
+      head[i].area = head[i-1].area + d;
+      head[i].vol = head[i-1].vol + d;
   }
   head->x = NULL; /* head contains no data */
-
+  
   scratch = malloc(n * sizeof(dlnode_t*));
   for (i = 0; i < n; i++)
-    scratch[i] = head + i + 1;
-
+      scratch[i] = head + i + 1;
+  
   for (j = d-1; j >= 0; j--) {
-    for (i = 0; i < n; i++)
-      scratch[i]->x--;
-    qsort(scratch, n, sizeof(dlnode_t*), compare_node);
-    head->next[j] = scratch[0];
-    scratch[0]->prev[j] = head;
-    for (i = 1; i < n; i++) {
-      scratch[i-1]->next[j] = scratch[i];
-      scratch[i]->prev[j] = scratch[i-1];
-    }
-    scratch[n-1]->next[j] = head;
-    head->prev[j] = scratch[n-1];
+      for (i = 0; i < n; i++)
+	  scratch[i]->x--;
+      qsort(scratch, n, sizeof(dlnode_t*), compare_node);
+      head->next[j] = scratch[0];
+      scratch[0]->prev[j] = head;
+      for (i = 1; i < n; i++) {
+	  scratch[i-1]->next[j] = scratch[i];
+	  scratch[i]->prev[j] = scratch[i-1];
+      }
+      scratch[n-1]->next[j] = head;
+      head->prev[j] = scratch[n-1];
   }
   free(scratch);
   return head;
 }
 
-static void delete (dlnode_t *nodep, int dim, double * bound) {
-  int i;
-
-  for (i = 0; i < dim; i++) {
-    nodep->prev[i]->next[i] = nodep->next[i];
-    nodep->next[i]->prev[i] = nodep->prev[i];
-    if (bound[i] > nodep->x[i])
-      bound[i] = nodep->x[i];
-  }
+static void delete(dlnode_t *nodep, int dim, double *bound) {
+    int i;
+    
+    for (i = 0; i < dim; i++) {
+	nodep->prev[i]->next[i] = nodep->next[i];
+	nodep->next[i]->prev[i] = nodep->prev[i];
+	if (bound[i] > nodep->x[i])
+	    bound[i] = nodep->x[i];
+    }
 }
 
 static void reinsert (dlnode_t *nodep, int dim, double * bound) {
-  int i;
-
-  for (i = 0; i < dim; i++) {
-    nodep->prev[i]->next[i] = nodep;
-    nodep->next[i]->prev[i] = nodep;
-    if (bound[i] > nodep->x[i])
-      bound[i] = nodep->x[i];
-  }
+    int i;
+    
+    for (i = 0; i < dim; i++) {
+	nodep->prev[i]->next[i] = nodep;
+	nodep->next[i]->prev[i] = nodep;
+	if (bound[i] > nodep->x[i])
+	    bound[i] = nodep->x[i];
+    }
 }
 
 static double hv_recursive( dlnode_t *list, int dim, int c, const double * ref, double * bound) {
-  dlnode_t *p0,*p1,*pp;
-  double hypera,hyperv=0;
-  double height;
+    dlnode_t *p0,*p1,*pp;
+    double hypera,hyperv=0;
+    double height;
+    
 
-
-  /* ------------------------------------------------------
-     General case for dimensions higher than stop_dimension
-     ------------------------------------------------------ */
-  if ( dim > stop_dimension ) {
-    p0 = list;
-    for (p1 = p0->prev[dim]; p1->x; p1 = p1->prev[dim]) {
-      if (p1->ignore < dim)
-	p1->ignore = 0;
-    }
-    while (
-	   p0->prev[dim]->x[dim] > bound[dim] &&
-	   c > 1 ) {
-      p0 = p0->prev[dim];
-      delete(p0, dim, bound);
-      c--;
-    }
-    p1 = p0->prev[dim];
-
-    if (c > 1)
-      hyperv = p1->prev[dim]->vol[dim] + p1->prev[dim]->area[dim]
-	* (p1->x[dim] - p1->prev[dim]->x[dim]);
-    else {
-      p1->area[0] = 1;
-      int i;
-      for (i = 1; i <= dim; i++)
-	p1->area[i] = p1->area[i-1] * (ref[i-1] - p1->x[i-1]);
-    }
-    p1->vol[dim] = hyperv;
-    if (p1->ignore >= dim)
-      p1->area[dim] = p1->prev[dim]->area[dim];
-    else {
-      p1->area[dim] = hv_recursive(list, dim-1, c, ref, bound);
-      if (p1->area[dim] <= p1->prev[dim]->area[dim])
-	p1->ignore = dim;
-    }
-
-    while (p0->x != NULL) {
-      hyperv += p1->area[dim] * (p0->x[dim] - p1->x[dim]);
-      bound[dim] = p0->x[dim];
-      reinsert(p0, dim, bound);
-      c++;
-      p1 = p0;
-      p0 = p0->next[dim];
-      p1->vol[dim] = hyperv;
-      if (p1->ignore >= dim)
-	p1->area[dim] = p1->prev[dim]->area[dim];
-      else {
-	p1->area[dim] = hv_recursive(list, dim-1, c, ref, bound);
-	if (p1->area[dim] <= p1->prev[dim]->area[dim])
-	  p1->ignore = dim;
-      }
-    }
-    hyperv +=  p1->area[dim] * (ref[dim] - p1->x[dim]);
-    return hyperv;
-  } else if (dim == 2) { // 3D case:
-    pp = list->next[2];
-    avl_init_node(pp->tnode,pp->x);
-    avl_insert_top(tree,pp->tnode);
-
-    hypera = (ref[0] - pp->x[0])*(ref[1] - pp->x[1]);
-
-    if (c == 1)
-      height = ref[2] - pp->x[2];
-    else
-      height = pp->next[2]->x[2] - pp->x[2];
-
-    hyperv = hypera * height;
-
-    while ((pp=pp->next[2])->x) {
-      height = (pp==list->prev[2])
-	? ref[2] - pp->x[2]
-	: pp->next[2]->x[2] - pp->x[2];
-      if (pp->ignore>=2)
-	hyperv += hypera * height;
-      else {
-	const double * prv_ip, * nxt_ip;
-	avl_node_t *tnode;
-
-	avl_init_node(pp->tnode, pp->x);
-
-	if (avl_search_closest(tree, pp->x, &tnode) <= 0) {
-	  nxt_ip = (double *)(tnode->item);
-	  tnode = tnode->prev;
-	} else {
-	  nxt_ip = (tnode->next!=NULL)
-	    ? (double *)(tnode->next->item)
-	    : ref;
+    /* ------------------------------------------------------
+       General case for dimensions higher than stop_dimension
+       ------------------------------------------------------ */
+    if ( dim > stop_dimension ) {
+	p0 = list;
+	for (p1 = p0->prev[dim]; p1->x; p1 = p1->prev[dim]) {
+	    if (p1->ignore < dim)
+		p1->ignore = 0;
 	}
-
-	if (nxt_ip[0] > pp->x[0]) {
-
-	  avl_insert_after(tree, tnode, pp->tnode);
-
-	  if (tnode !=NULL) {
-	    prv_ip = (double *)(tnode->item);
-
-	    if (prv_ip[0] > pp->x[0]) {
-	      const double * cur_ip;
-
-	      tnode = pp->tnode->prev;
-	      // cur_ip = point dominated by pp with highest [0]-coordinate
-	      cur_ip = (double *)(tnode->item);
-	      while (tnode->prev) {
-		prv_ip = (double *)(tnode->prev->item);
-		hypera -= (prv_ip[1] - cur_ip[1])*(nxt_ip[0] - cur_ip[0]);
-		if (prv_ip[0] < pp->x[0])
-		  break; // prv is not dominated by pp
-		cur_ip = prv_ip;
-		avl_unlink_node(tree,tnode);
-		tnode = tnode->prev;
-	      }
-
-	      avl_unlink_node(tree,tnode);
-
-	      if (!tnode->prev) {
-		hypera -= (ref[1] - cur_ip[1])*(nxt_ip[0] - cur_ip[0]);
-		prv_ip = ref;
-	      }
+	while (p0->prev[dim]->x[dim] > bound[dim] && c > 1 ) {
+	    p0 = p0->prev[dim];
+	    delete(p0, dim, bound);
+	    c--;
+	}
+	p1 = p0->prev[dim];
+	
+	if (c > 1)
+	    hyperv = p1->prev[dim]->vol[dim] + p1->prev[dim]->area[dim]
+		* (p1->x[dim] - p1->prev[dim]->x[dim]);
+	else {
+	    p1->area[0] = 1;
+	    int i;
+	    for (i = 1; i <= dim; i++)
+		p1->area[i] = p1->area[i-1] * (ref[i-1] - p1->x[i-1]);
+	}
+	p1->vol[dim] = hyperv;
+	if (p1->ignore >= dim)
+	    p1->area[dim] = p1->prev[dim]->area[dim];
+	else {
+	    p1->area[dim] = hv_recursive(list, dim-1, c, ref, bound);
+	    if (p1->area[dim] <= p1->prev[dim]->area[dim])
+		p1->ignore = dim;
+	}
+	
+	while (p0->x != NULL) {
+	    hyperv += p1->area[dim] * (p0->x[dim] - p1->x[dim]);
+	    bound[dim] = p0->x[dim];
+	    reinsert(p0, dim, bound);
+	    c++;
+	    p1 = p0;
+	    p0 = p0->next[dim];
+	    p1->vol[dim] = hyperv;
+	    if (p1->ignore >= dim)
+		p1->area[dim] = p1->prev[dim]->area[dim];
+	    else {
+		p1->area[dim] = hv_recursive(list, dim-1, c, ref, bound);
+		if (p1->area[dim] <= p1->prev[dim]->area[dim])
+		    p1->ignore = dim;
 	    }
-	  } else
-	    prv_ip = ref;
-
-	  hypera += (prv_ip[1] - pp->x[1])*(nxt_ip[0] - pp->x[0]);
-
 	}
+	hyperv +=  p1->area[dim] * (ref[dim] - p1->x[dim]);
+	return hyperv;
+    } else if (dim == 2) { // 3D case:
+	pp = list->next[2];
+	avl_init_node(pp->tnode,pp->x);
+	avl_insert_top(tree,pp->tnode);
+	
+	hypera = (ref[0] - pp->x[0])*(ref[1] - pp->x[1]);
+	
+	if (c == 1)
+	    height = ref[2] - pp->x[2];
 	else
-	  pp->ignore = 2;
-
-	if (height > 0)
-	  hyperv += hypera * height;
-      }
+	    height = pp->next[2]->x[2] - pp->x[2];
+	
+	hyperv = hypera * height;
+	
+	while ((pp=pp->next[2])->x) {
+	    height = (pp==list->prev[2])
+		? ref[2] - pp->x[2]
+		: pp->next[2]->x[2] - pp->x[2];
+	    if (pp->ignore>=2)
+		hyperv += hypera * height;
+	    else {
+		const double * prv_ip, * nxt_ip;
+		avl_node_t *tnode;
+		
+		avl_init_node(pp->tnode, pp->x);
+		
+		if (avl_search_closest(tree, pp->x, &tnode) <= 0) {
+		    nxt_ip = (double *)(tnode->item);
+		    tnode = tnode->prev;
+		} else {
+		    nxt_ip = (tnode->next!=NULL)
+			? (double *)(tnode->next->item)
+			: ref;
+		}
+		
+		if (nxt_ip[0] > pp->x[0]) {		    
+		    avl_insert_after(tree, tnode, pp->tnode);
+		    if (tnode !=NULL) {
+			prv_ip = (double *)(tnode->item);
+			if (prv_ip[0] > pp->x[0]) {
+			    const double * cur_ip;
+			    
+			    tnode = pp->tnode->prev;
+			    // cur_ip = point dominated by pp with highest [0]-coordinate
+			    cur_ip = (double *)(tnode->item);
+			    while (tnode->prev) {
+				prv_ip = (double *)(tnode->prev->item);
+				hypera -= (prv_ip[1] - cur_ip[1])*(nxt_ip[0] - cur_ip[0]);
+				if (prv_ip[0] < pp->x[0])
+				    break; // prv is not dominated by pp
+				cur_ip = prv_ip;
+				avl_unlink_node(tree,tnode);
+				tnode = tnode->prev;
+			    }			    
+			    avl_unlink_node(tree,tnode);			    
+			    if (!tnode->prev) {
+				hypera -= (ref[1] - cur_ip[1])*(nxt_ip[0] - cur_ip[0]);
+				prv_ip = ref;
+			    }
+			}
+		    } else
+			prv_ip = ref;		    
+		    hypera += (prv_ip[1] - pp->x[1])*(nxt_ip[0] - pp->x[0]);		    
+		} else
+		    pp->ignore = 2;		
+		if (height > 0)
+		    hyperv += hypera * height;
+	    }
+	}
+	avl_clear_tree(tree);
+	return hyperv;
+    } else if (dim == 1) { /* special case of dimension 2 */
+	p1 = list->next[1];
+	hypera = p1->x[0];
+	while ((p0 = p1->next[1])->x) {
+	    hyperv += (ref[0] - hypera) * (p0->x[1] - p1->x[1]);
+	    if (p0->x[0] < hypera)
+		hypera = p0->x[0];
+	    p1 = p0;
+	}
+	hyperv += (ref[0] - hypera) * (ref[1] - p1->x[1]);
+	return hyperv;
+    } else if (dim == 0) {     /* special case of dimension 1 */
+	return (ref[0] - list->next[0]->x[0]);
+    } else {
+	fprintf(stderr, "%s:%d: unreachable condition! \n"
+		"This is a bug, please report it to "
+		"m.lopez-ibanez@napier.ac.uk\n", __FILE__, __LINE__);
+	exit(EXIT_FAILURE);
     }
-    avl_clear_tree(tree);
-    return hyperv;
-  }
-
-  /* special case of dimension 2 */
-  else if (dim == 1) {
-    p1 = list->next[1];
-    hypera = p1->x[0];
-    while ((p0 = p1->next[1])->x) {
-      hyperv += (ref[0] - hypera) * (p0->x[1] - p1->x[1]);
-      if (p0->x[0] < hypera)
-	hypera = p0->x[0];
-      p1 = p0;
-    }
-    hyperv += (ref[0] - hypera) * (ref[1] - p1->x[1]);
-    return hyperv;
-  }
-
-  /* special case of dimension 1 */
-  else if (dim == 0) {
-    return (ref[0] - list->next[0]->x[0]);
-  }
-
-  else {
-    fprintf(stderr, "%s:%d: unreachable condition! \n"
-	    "This is a bug, please report it to "
-	    "m.lopez-ibanez@napier.ac.uk\n", __FILE__, __LINE__);
-    exit(EXIT_FAILURE);
-  }
 }
 
 #define UNPACK_REAL_VECTOR(S, D, N)             \
