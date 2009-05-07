@@ -44,7 +44,7 @@
 ## 2009-04-24: (OME)
 ##   * Turn file into R package
 
-cma.es <- function(par, fn, ..., control=list()) {
+cma.es <- function(par, fn, ..., lower, upper, control=list()) {
   norm <- function(x)
     sqrt(crossprod(x))
   
@@ -70,6 +70,16 @@ cma.es <- function(par, fn, ..., control=list()) {
     sigma <- rep(sigma, N)
   stopifnot(length(sigma)==N)
 
+  if (missing(lower))
+    lower <- rep(-Inf, N)
+  else if (length(lower) == 1)  
+    lower <- rep(lower, N)
+  
+  if (missing(upper))
+    upper <- rep(-Inf, N)
+  else if (length(upper) == 1)  
+    upper <- rep(upper, N)
+  
   ## Strategy parameter setting: Selection  
   lambda <- 4+floor(3*log(N));  
   mu <- floor(lambda/2);        
@@ -104,6 +114,12 @@ cma.es <- function(par, fn, ..., control=list()) {
       ## Transform uncorrelated N(0,1) random vectors to the desired
       ## N(xmean, sigma) distribution:
       arx[,k] <- xmean + sigma * (BD %*% arz[,k])
+      ## Enforce bounds:
+      lidx <- arx[,k] < lower
+      arx[lidx, k] <- lower[lidx]     
+      uidx <- arx[,k] > upper
+      arx[uidx, k] <- upper[uidx]
+      ## Calculate fitness:
       arfitness[k] <- fn(arx[,k], ...) / fnscale
       counteval <- counteval+1;
     }
@@ -156,7 +172,7 @@ cma.es <- function(par, fn, ..., control=list()) {
   ## other solutions are supposed to be 'near' to the best on in the
   ## parameter space.
   res <- list(par=arx[, arindex[1]],
-              value=arfitness[1],
+              value=arfitness[1] * fnscale,
               counts=cnt,
               convergence=ifelse(counteval >= stopeval, 1L, 0L),
               message=NULL)
