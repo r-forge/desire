@@ -6,7 +6,7 @@
   evolutionary strategy.
 }
 \usage{
-  cma.es(par, fn, ..., control = list())
+  cma.es(par, fn, ..., lower, upper, control = list())
 }
 \arguments{
   \item{par}{Initial values for the parameters to be optimized over.}
@@ -14,11 +14,11 @@
     argument the vector of parameters over which minimization is to take
     place. It should return a scalar result.}
   \item{\dots}{Further arguments to be passed to \code{fn}.}
+  \item{lower, upper}{Bounds on the variables.}
   \item{control}{A list of control parameters. See \sQuote{Details}.}
 }
 \details{
   Note that arguments after \code{\dots} must be matched exactly.
-
   By default this function performs minimization, but it will maximize
   if \code{control$fnscale} is negative. It tries to be a drop in
   replacement for \code{optim}.
