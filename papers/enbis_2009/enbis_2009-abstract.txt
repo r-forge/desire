@@ -1,0 +1,31 @@
+Multicriteria optimization using R and the desirability package desire
+
+Olaf Mersmann
+Heike Trautmann
+Detlef Steuer
+Claus Weihs
+Uwe Ligges
+
+Fakultät Statistik, Technische Universität Dortmund
+Fakultät WiSo, Helmut-Schmidt Universität Hamburg
+ 
+Desirability functions and desirability indices are powerful tools for
+multicriteria optimization und multicriteria quality control
+purposes. The package desire not only provides functions for computing
+desirability functions of Harrington- and Derringer/Suich-type but
+also allows the specification of functions in an interactive
+manner. Density and distribution functions of the desirability
+functions and the desirability index are integrated including the
+possibility of random number generation, . Optimization procedures for
+the desirability index and a method for determining the uncertainty of
+the optimum influence factor levels as wells as a control chart for
+the desirability index with analysis of out-of control-signals are
+implemented. The Desirability Pareto-Concept allows focussing on
+relevant parts of the Pareto-front by integrating
+a-priori-expert-knowledge in the multicriteria optimization process.
+
+We will focus on the practical aspects of optimizing. First we will
+give a short review of the traditional optimization strategy using
+desirability indices. Then we will show an example of the procedure
+using data from a chocolate production process and extend it by
+including the variance of the estimates in the optimization.
