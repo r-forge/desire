@@ -1,0 +1,54 @@
+\documentclass[a4paper, halfparskip+, DIV20, 10pt]{scrartcl}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage[round]{natbib}
+\usepackage{mathpazo}
+ 
+\hyphenation{Tech-ni-sche}
+\begin{document}
+\title{\LARGE Multicriteria optimization using \textsf{R} \\
+  and the desirability package \texttt{desire}}
+\author{%
+  \large Olaf Mersmann$^{\text{1}}$
+  \and \large Heike Trautmann$^{\text{1}}$
+  \and \large Detlef Steuer$^{\text{2}}$
+  \and \large Claus Weihs$^{\text{1}}$
+  \and \large Uwe Ligges$^{\text{1}}$
+}
+\date{}
+\maketitle
+\thispagestyle{empty}
+\footnotetext[1]{Fakultät Statistik, Technische Universität Dortmund}
+\footnotetext[2]{Fakultät WiSo, Helmut-Schmidt Universität Hamburg}
+ 
+\vskip-3em Desirability functions and desirability indices are
+powerful tools for multicriteria optimization und multicriteria
+quality control purposes. The package \texttt{desire} not only
+provides functions for computing desirability functions of Harrington-
+\citep{harrington1965} and Derringer/Suich-type \citep{derringer1980}
+but also allows the specification of functions in an interactive
+manner. Density and distribution functions of the desirability
+functions and the desirabi\-lity index are integrated including the
+possibility of random number generation \citep{steuer2005},
+\citep{trautmann2006}. Optimization procedures for the desirability
+index and a method for determining the uncertainty of the optimum
+influence factor levels \citep{trautmann2004a} as wells as a control
+chart for the desirability index with analysis of out-of
+control-signals are implemented \citep{trautmann2004}. The
+Desirability Pareto-Concept allows focussing on relevant parts of the
+Pareto-front by integrating a-priori-expert-knowledge in the
+multicriteria optimization process \citep{mehnen2007}.
+
+We will focus on the practical aspects of optimizing. First we will
+give a short review of the traditional optimization strategy using
+desirability indices. Then we will show an example of the procedure
+using data from a chocolate production process \citep{alamprese2007}
+an extend the optimization by including the variance of the estimates
+in the optimization.
+ 
+\bibliography{enbis_2009-abstract}{}
+\bibliographystyle{plainnat}
+\end{document}
+ 
+%% (set-fill-column 90)
