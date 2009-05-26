@@ -27,6 +27,7 @@ minimumDI.desire.function <- function(f, ...) {
   ev <- function(x) {
     fn <- function(z)
       min(sapply(i, function(k) dfs[[k]](z[k])))
+
     if (is.matrix(x)) {
       apply(x, 1, fn)
     } else {
@@ -44,8 +45,15 @@ minimumDI.desire.function <- function(f, ...) {
 }
 
 minimumDI.composite.desire.function <- function(f, ...) {
-  ev <- function(x)
-    min(sapply(dfs, function(f) f(x)))
+  ev <- function(x) {
+    dval <- sapply(dfs, function(f) f(x))
+    
+    if (is.matrix(dval)) {
+      apply(dval, 1, min)
+    } else {
+      min(dval)
+    }
+  }
 
   dfs <- list(f, ...)
   if (!all(sapply(dfs, is.composite.desirability)))

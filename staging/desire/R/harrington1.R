@@ -50,14 +50,16 @@ print.harrington1 <- function(x, ...) {
 dharrington1 <- function(x, y1, d1, y2, d2, mean, sd) {
   b <- h1.solve.params(y1, d1, y2, d2)
   mu.t <- -(b[1] + b[2] * mean)
-  sd.t <- b[2]*sd
+  ## OME: sigma.t^2 = b[2]^2 * sd^2 => abs!
+  sd.t <- abs(b[2]*sd)
   dloglognorm(x, mu.t, sd.t)
 }
 
 ddesire.harrington1 <- function(x, f, mean, sd) {
   e <- environment(f)
   mu.t <- -(e$b0 + e$b1*mean)
-  sd.t <- e$b1*sd
+  ## OME: sigma.t^2 = e$b1^2 * sd^2 => abs!
+  sd.t <- abs(e$b1*sd)
   dloglognorm(x, mu.t, sd.t)
 }
 
