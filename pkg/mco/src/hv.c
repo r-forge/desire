@@ -536,12 +536,14 @@ static double hv_recursive( dlnode_t *list, int dim, int c, const double * ref, 
 	    if (p1->ignore < dim)
 		p1->ignore = 0;
 	}
-	while (p0->prev[dim]->x[dim] > bound[dim] && c > 1 ) {
-	    p0 = p0->prev[dim];
+
+	p1 = p0->prev[dim];
+	while (c > 1 && (p1->x[dim] > bound[dim] || p1->prev[dim]->x[dim] >= bound[dim])) {
+	    p0 = p1;
 	    delete(p0, dim, bound);
+	    p1 = p0->prev[dim];
 	    c--;
 	}
-	p1 = p0->prev[dim];
 	
 	if (c > 1)
 	    hyperv = p1->prev[dim]->vol[dim] + p1->prev[dim]->area[dim]

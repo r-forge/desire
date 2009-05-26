@@ -49,15 +49,29 @@ meanDI.desire.function <- function(f, ..., weights=1) {
   return(ev)
 }
 
-meanDI.composite.desire.function <- function(f, ..., weights=1) {
-  weights <- weights/sum(weights)
-  ev <- function(x)
-    mean(sapply(dfs, function(f) f(x)) * weights)
-  
+meanDI.composite.desire.function <- function(f, ..., weights=1) {  
+  ev <- function(x) {
+    dval <- sapply(dfs, function(f) f(x))
+
+    if (is.matrix(dval)) {
+      dval %*% weights
+    } else {
+      drop(crossprod(dval, weights))
+    }
+  }
+
   dfs <- list(f, ...)
   if (!all(sapply(dfs, is.composite.desirability)))
     stop("Not all supplied arguments are composite desirability functions.")
+
+  l <- length(dfs)
+  if (length(weights) == 1) 
+    weights <- rep(weights, l)
+
+  if (length(weights) != l)
+    stop("Incorrect size for weights vector.")
   
+  weights <- weights / sum(weights)  
   class(ev) <- "desire.index"
   return(ev)
 }
