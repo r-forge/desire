@@ -38,6 +38,12 @@
     \item{\code{sigma}}{Inital variance estimates. Can be a single
       number or a vector of length \code{D}, where \code{D} is the dimension
       of the parameter space.}
+    \item{\code{weights}}{Recombination weights}
+    \item{\code{damps}}{Damping for step-size}
+    \item{\code{cs}}{Cumulation constant for step-size}
+    \item{\code{ccum}}{Cumulation constant for covariance matrix}
+    \item|\code{ccov.1}{Learning rate for rank-one update}
+    \item{\code{ccov.mu}}{Learning rate for rank-mu update}
   }
 }
 \value{

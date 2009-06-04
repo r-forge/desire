@@ -158,7 +158,9 @@ static avl_tree_t *avl_init_tree(avl_tree_t *rc, avl_compare_t cmp, avl_freeitem
 }
 
 static avl_tree_t *avl_alloc_tree(avl_compare_t cmp, avl_freeitem_t freeitem) {
-  return avl_init_tree(malloc(sizeof(avl_tree_t)), cmp, freeitem);
+    return avl_init_tree((avl_tree_t *)R_alloc(1, sizeof(avl_tree_t)), 
+			 cmp, 
+			 freeitem);
 }
 
 static void avl_clear_tree(avl_tree_t *avltree) {
@@ -175,14 +177,14 @@ static void avl_free_nodes(avl_tree_t *avltree) {
     next = node->next;
     if(freeitem)
       freeitem(node->item);
-    free(node);
+    //free(node);
   }
   avl_clear_tree(avltree);
 }
 
 static void avl_free_tree(avl_tree_t *avltree) {
   avl_free_nodes(avltree);
-  free(avltree);
+  //free(avltree);
 }
 
 static void avl_clear_node(avl_node_t *newnode) {
@@ -457,28 +459,28 @@ static dlnode_t * setup_cdllist(double *data, int d, int n) {
   dlnode_t **scratch;
   int i, j;
 
-  head = malloc ((n+1) * sizeof(dlnode_t));
+  head = R_alloc (n+1, sizeof(dlnode_t));
 
   head->x = data;
   head->ignore = 0;  /* should never get used */
-  head->next   = malloc(d * (n+1) * sizeof(dlnode_t*));
-  head->prev   = malloc(d * (n+1) * sizeof(dlnode_t*));
-  head->tnode  = malloc(sizeof(avl_node_t));
-  head->area   = malloc(d * (n+1) * sizeof(double));
-  head->vol    = malloc(d * (n+1) * sizeof(double));
+  head->next   = R_alloc(d * (n+1), sizeof(dlnode_t*));
+  head->prev   = R_alloc(d * (n+1), sizeof(dlnode_t*));
+  head->tnode  = (dlnode_t *)R_alloc(1, sizeof(avl_node_t));
+  head->area   = R_alloc(d * (n+1), sizeof(double));
+  head->vol    = R_alloc(d * (n+1), sizeof(double));
 
   for (i = 1; i <= n; i++) {
       head[i].x = head[i-1].x + d ;/* this will be fixed a few lines below... */
       head[i].ignore = 0;
       head[i].next = head[i-1].next + d;
       head[i].prev = head[i-1].prev + d;
-      head[i].tnode = malloc(sizeof(avl_node_t));
+      head[i].tnode = (dlnode_t *)R_alloc(1, sizeof(avl_node_t));
       head[i].area = head[i-1].area + d;
       head[i].vol = head[i-1].vol + d;
   }
   head->x = NULL; /* head contains no data */
   
-  scratch = malloc(n * sizeof(dlnode_t*));
+  scratch = Calloc(n, dlnode_t*);
   for (i = 0; i < n; i++)
       scratch[i] = head + i + 1;
   
@@ -495,7 +497,7 @@ static dlnode_t * setup_cdllist(double *data, int d, int n) {
       scratch[n-1]->next[j] = head;
       head->prev[j] = scratch[n-1];
   }
-  free(scratch);
+  Free(scratch);
   return head;
 }
 

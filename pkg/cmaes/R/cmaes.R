@@ -47,51 +47,59 @@
 cma.es <- function(par, fn, ..., lower, upper, control=list()) {
   norm <- function(x)
     sqrt(crossprod(x))
-  
+
+  controlParam <- function(name, default) {
+    v <- control[[name]]
+    if (is.null(v))
+      return (default)
+    else
+      return (v)
+  }
+
+  ## Inital solution:
   xmean <- par
   N <- length(xmean)
 
-  fnscale <- control$fnscale
-  if (is.null(fnscale))
-    fnscale <- 1
-  
-  stopfitness <- control$stopfitness
-  if (is.null(stopfitness))
-    stopfitness <- -Inf
-  
-  stopeval <- control$maxit
-  if (is.null(stopeval))
-    stopeval <- 100 * N^2
-  
-  sigma <- control$sigma
-  if (is.null(sigma))
-    sigma <- rep(0.5, N)
-  if (length(sigma) == 1)
-    sigma <- rep(sigma, N)
-  stopifnot(length(sigma)==N)
-
+  ## Box constraints:
   if (missing(lower))
     lower <- rep(-Inf, N)
   else if (length(lower) == 1)  
     lower <- rep(lower, N)
-  
+
   if (missing(upper))
-    upper <- rep(-Inf, N)
+    upper <- rep(Inf, N)
   else if (length(upper) == 1)  
     upper <- rep(upper, N)
-  
+
+  ## Parameters:
+  trace       <- controlParam("trace", FALSE)  
+  fnscale     <- controlParam("fnscale", 1)
+  stopfitness <- controlParam("stopfitness", -Inf)
+  maxiter     <- controlParam("maxit", 100 * N^2)
+  sigma       <- controlParam("sigma", rep(0.5, N))
+  if (length(sigma) == 1)
+    sigma <- rep(sigma, N)
+
   ## Strategy parameter setting: Selection  
-  lambda <- 4+floor(3*log(N));  
-  mu <- floor(lambda/2);        
-  weights <- log(mu+1)-log(1:mu)
-  weights <- weights/sum(weights) # Normalize weights
-  mueff <- sum(weights)^2/sum(weights^2)
-  
-  cc = 4/(N+4)
-  cs = (mueff+2)/(N+mueff+3)
-  mucov = mueff
-  ccov = (1/mucov) * 2/(N+1.4)^2 + (1-1/mucov) * ((2*mucov-1)/((N+2)^2+2*mucov))
-  damps = 1 + 2*max(0, sqrt((mueff-1)/(N+1))-1) + cs
+  lambda  <- controlParam("lambda", 4+floor(3*log(N)))
+  mu      <- controlParam("mu", floor(lambda/2))
+  weights <- controlParam("weights", log(mu+1) - log(1:mu))
+  weights <- weights/sum(weights)
+  mueff   <- controlParam("mueff", sum(weights)^2/sum(weights^2))
+  cc      <- controlParam("ccum", 4/(N+4))
+  cs      <- controlParam("cs", (mueff+2)/(N+mueff+3))
+  mucov   <- controlParam("ccov.mu", mueff)
+  ccov    <- controlParam("ccov.1",
+                        (1/mucov) * 2/(N+1.4)^2
+                        + (1-1/mucov) * ((2*mucov-1)/((N+2)^2+2*mucov)))
+  damps <- controlParam("damps",
+                        1 + 2*max(0, sqrt((mueff-1)/(N+1))-1) + cs)
+
+  ## Safty checks:
+  stopifnot(length(upper) == N)  
+  stopifnot(length(lower) == N)
+  stopifnot(all(lower <= upper))
+  stopifnot(length(sigma) == N)
   
   ## Initialize dynamic (internal) strategy parameters and constants
   pc <- rep(0.0, N)
@@ -102,51 +110,60 @@ cma.es <- function(par, fn, ..., lower, upper, control=list()) {
   C <- BD %*% t(BD)
 
   chiN <- sqrt(N) * (1-1/(4*N)+1/(21*N^2))
-  counteval <- 0
-  while (counteval < stopeval) {
-    arx <- matrix(0, nrow=N, ncol=lambda)
-    ## arz <- matrix(0, nrow=N, ncol=lambda)
+  
+  iter <- 0L      ## Number of iterations
+  counteval <- 0L ## Number of function evaluations
+
+  ## Preallocate work arrays:
+  arx <- matrix(0.0, nrow=N, ncol=lambda)
+  arfitness <- numeric(lambda)
+  while (iter < maxiter) {
+    iter <- iter + 1L
+    
     arz <- matrix(rnorm(N*lambda), nrow=N, ncol=lambda)
-    arfitness <- numeric(lambda)
     for (k in 1:lambda) {
-      ## arz[,k] <- rnorm(N)
-      
       ## Transform uncorrelated N(0,1) random vectors to the desired
       ## N(xmean, sigma) distribution:
       arx[,k] <- xmean + sigma * (BD %*% arz[,k])
       ## Enforce bounds:
       lidx <- arx[,k] < lower
-      arx[lidx, k] <- lower[lidx]     
+      if (any(lidx))
+        arx[lidx, k] <- lower[lidx]
       uidx <- arx[,k] > upper
-      arx[uidx, k] <- upper[uidx]
+      if (any(uidx))
+        arx[uidx, k] <- upper[uidx]
       ## Calculate fitness:
       arfitness[k] <- fn(arx[,k], ...) / fnscale
-      counteval <- counteval+1;
+      counteval <- counteval + 1L;
     }
     
     ## Order fitness:
     arindex <- order(arfitness)
     arfitness <- arfitness[arindex]
-    xmean <- drop(arx[,arindex[1:mu]] %*% weights)
-    zmean <- drop(arz[,arindex[1:mu]] %*% weights)
+
+    aripop <- arindex[1:mu]
+    selx <- arx[,aripop]
+    xmean <- drop(selx %*% weights)
+    selz <- arz[,aripop]
+    zmean <- drop(selz %*% weights)
 
     ## Cumulation: Update evolutionary paths
     ps <- (1-cs)*ps + sqrt(cs*(2-cs)*mueff) * (B %*% zmean)
     hsig <- drop((norm(ps)/sqrt(1-(1-cs)^(2*counteval/lambda))/chiN) < (1.4 + 2/(N+1)))
     pc <- (1-cc)*pc + hsig * sqrt(cc*(2-cc)*mueff) * drop(BD %*% zmean)
 
-    ## Adapt C:
-    BDz <- BD %*% arz[,arindex[1:mu]]
+    ## Adapt Covariance Matrix:
+    BDz <- BD %*% selz
     C <- (1-ccov) * C + ccov * (1/mucov) *
-      ((pc %*% t(pc)) + (1-hsig) * cc*(2-cc) * C) +
+      (pc %o% pc + (1-hsig) * cc*(2-cc) * C) +
         ccov * (1-1/mucov) * BDz %*% diag(weights) %*% t(BDz)
     
     ## Adapt step size sigma:
-    sigma <- sigma * exp((cs/damps)*(norm(ps)/chiN - 1))
+    sigma <- sigma * exp((norm(ps)/chiN - 1)*cs/damps)
     
     e <- eigen(C, symmetric=TRUE)
     B <- e$vectors
-    D <- if (length(e$values) > 1)
+    D <- if (length(e$values) > 1L)
       diag(sqrt(e$values))
     else
       as.matrix(sqrt(e$values))
@@ -162,7 +179,7 @@ cma.es <- function(par, fn, ..., lower, upper, control=list()) {
       warning("Flat fitness function. Increasing sigma.")
     }
   }
-  cnt <- vector("integer", 2)
+  cnt <- vector("integer", 2L)
   cnt[1] <- as.integer(counteval)
   cnt[2] <- NA
   names(cnt) <- c("function", "gradient")
@@ -174,7 +191,7 @@ cma.es <- function(par, fn, ..., lower, upper, control=list()) {
   res <- list(par=arx[, arindex[1]],
               value=arfitness[1] * fnscale,
               counts=cnt,
-              convergence=ifelse(counteval >= stopeval, 1L, 0L),
+              convergence=ifelse(iter >= maxiter, 1L, 0L),
               message=NULL)
   return(res)
 }
