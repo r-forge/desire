@@ -38,7 +38,7 @@ qtruncnorm <- function(p, a, b, mean=0, sd=1) {
 }
 
 rtruncnorm <- function(n, a, b, mean=0, sd=1)
-  .Call("rtruncnorm", n, a, b, mean, sd)
+  .Call("rtruncnorm", as.integer(n), a, b, mean, sd)
 
 etruncnorm <- function(a, b, mean, sd)
   .Call("etruncnorm", a, b, mean, sd)
