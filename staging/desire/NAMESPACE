@@ -67,7 +67,7 @@ S3method(pdesire, dsLTU11)
 S3method(edesire, dsLTU11)
 
 ### dsITU11 functions
-## S3method(ddesire, dsITU11)
+S3method(ddesire, dsITU11)
 ## S3method(pdesire, dsITU11)
 S3method(edesire, dsITU11)
 
