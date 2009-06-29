@@ -42,7 +42,7 @@ plot.harrington2 <- function(x, ...) {
   e <- environment(x)
   plot.desire.function(x, ...)
   abline(v=c(e$LSL, e$USL), col="grey", lty=2)
-  mtext(c("LSL", "USL"), at=c(e$LSL, e$USL), line=.5)
+  mtext(c("LSL", "USL"), at=c(e$LSL, e$USL), line=.5, cex=par("cex"))
 }
 
 ## Density:
